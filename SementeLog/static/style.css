@@ -1,0 +1,1798 @@
+/* Variáveis de Cores */
+:root {
+    --color-dark-green: rgba(27, 48, 34, 1); /* Verde Escuro da Sidebar */
+    --color-medium-green:rgba(94, 140, 76, 1); /* Verde do Container Principal */
+    --color-light-cream: #f8f7f5; /* Fundo do Card */
+    --color-white: #ffffff;
+    --color-text:rgba(248, 231, 208, 1) ; /* Cor do texto da sidebar */
+    --color-text-dark: #294026; /* Cor do texto principal */
+}
+
+/* --- AJUSTES PARA OCUPAR A TELA INTEIRA (Full Viewport) --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Zera margens e paddings e define a altura total para HTML e BODY */
+html, body {
+    
+    height: 100%;
+    width: 100%;
+}
+
+
+
+/* Container Principal - Ocupa 100% da altura e largura da viewport */
+.container {
+    display: flex;
+    width: 100vw; /* 100% da largura da viewport */
+    height: 100vh; /* 100% da altura da viewport */
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: none; 
+    background-color: var(--color-medium-green); 
+}
+
+/* --- BARRA LATERAL (SIDEBAR) --- */
+.sidebar {
+    width: 250px;
+    background-color: var(--color-dark-green);
+    padding: 20px 0 20px 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 95%; 
+}
+
+/* Header Semântico da Sidebar */
+.sidebar-header {
+    padding-left: 850%;
+  
+    
+}
+
+.home-link {
+    font-size: 0.8em;
+    color: var(--color-text);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: block; 
+}
+
+/* Estilo para a curva na borda direita */
+.sidebar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px; 
+    height: 100%;
+    background-color: var(--color-dark-green);
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    transform: translateX(100%);
+    z-index: 1; 
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    color: var(--color-white);
+    margin-bottom: 30px;
+    padding-right: 20px;
+}
+
+.logo-icon {
+    font-size: 1.8em;
+    margin-right: 10px;
+}
+
+.logo-text {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px 12px 0;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.menu-item i {
+    width: 30px;
+    text-align: center;
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-white);
+}
+
+/* --- ÁREA DE CONTEÚDO PRINCIPAL --- */
+.content-area {
+    flex-grow: 1;
+    padding: 0 20px 20px 20px; 
+    display: flex;
+    flex-direction: column;
+     color: var(--color-white);
+}
+
+/* Barra Superior (onde fica Roberto Silva) */
+.top-bar {
+    width: 100%;
+    padding: 20px 0; 
+    display: flex;
+    justify-content: flex-end; /* Empurra o conteúdo para a direita */
+    align-items: center;
+    height: 60px; 
+    color: var(--color-white);
+}
+
+/* Agrupamento do nome e ícone */
+.user-info {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    padding-right: 20px; 
+}
+
+/* Espaço entre nome e ícone */
+.user-icon {
+    font-size: 1.2em;
+    margin-left: 10px; 
+    color: var(--color-white);
+}
+
+/* Card de Boas-Vindas */
+.welcome-card {
+    flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    margin-top: 55%; 
+    margin-left: 10%;
+    margin-right: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 20%;
+    padding-top: 10%;
+}
+
+.welcome-content {
+    text-align: center;
+    color: var(--color-text-dark);
+}
+
+.app-logo-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.logo-icon-center {
+    font-size: 2em;
+    margin-right: 10px;
+}
+
+.logo-text-center {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.user-icon-large {
+    font-size: 3em;
+    margin: 20px 0;
+}
+
+.welcome-content h1 {
+    font-size: 2.5em;
+    font-weight: 800;
+    line-height: 1.2;
+}
+/*======== boas vinda======== parte de cima ^^^==========*/
+
+
+
+/*========= compras===========*/
+
+/* Estilo para o item de menu ativo na sidebar */
+.menu-item.active {
+    background-color: var(--color-medium-green); /* Usa o verde do fundo do container para destacar */
+    color: var(--color-white);
+    font-weight: bold;
+    /* Linha branca à esquerda para maior destaque */
+    border-left: 3px solid var(--color-white);
+    padding-left: 7px; /* Compensa o border-left para manter o alinhamento */
+}
+
+/* Novo Card (Substitui o welcome-card) */
+.compras-card {
+    flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    padding: 30px;
+    color: var(--color-text-dark);
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 4%;
+    margin-bottom: 10%;
+    
+}
+
+.compras-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+ 
+}
+
+.compras-header h1 {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.home-button {
+    text-decoration: none;
+    color: var(--color-dark-green);
+    font-size: 1.5em;
+    transition: color 0.2s;
+}
+
+.home-button:hover {
+    color: var(--color-medium-green);
+}
+
+/* Barra de Ações (Botões) */
+.actions-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.action-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--color-white);
+    transition: opacity 0.2s;
+    font-size: 0.9em;
+}
+
+.action-button:hover {
+    opacity: 0.9;
+}
+
+.action-button.add {
+     margin-bottom: 7%;
+    background-color: #38761d; /* Verde Adicionar */
+}
+
+.action-button.delete {
+     margin-bottom: 7%;
+    background-color:   #38761d; /* Vermelho Excluir */
+}
+
+.action-button.date {
+    background-color:  #38761d; /* Azul Consultar Datas */
+    margin-bottom: 3%;
+}
+
+/* Barra de Pesquisa */
+.search-bar {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 10px 10px 40px; /* Espaço para o ícone */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.search-bar i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+/* Tabela */
+.table-container {
+    overflow-x: auto; /* Permite scroll em telas pequenas */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+thead th {
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
+    padding: 10px;
+    text-align: left;
+    font-weight: normal;
+}
+
+tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Estilos de Status (Cores) */
+.status {
+    padding: 3px 8px;
+    border-radius: 12px;
+    color: var(--color-white);
+    font-weight: bold;
+    font-size: 0.8em;
+    white-space: nowrap;
+}
+
+.status.concluded {
+    background-color: #6aa84f; 
+}
+
+.status.cancelled {
+    background-color:  RED; 
+}
+
+.status.pending {
+    background-color: rgb(225, 225, 49); 
+}
+
+/* Botões de Atualizar */
+.update-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    color: var(--color-white);
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: bold;
+    transition: opacity 0.2s;
+    white-space: nowrap; /* Impede quebrar em duas linhas */
+}
+
+.update-button:hover {
+    opacity: 0.8;
+}
+
+/* Cores dos botões de atualizar */
+.update-button.green-bg {
+    background-color: #6aa84f;
+}
+
+.update-button.red-bg {
+    background-color: #6aa84f;
+}
+
+.update-button.dark-bg {
+   background-color: #6aa84f;
+}
+
+/*======== compras acaba aqui ===============*/
+
+
+/*======= estoque============*/
+
+/* Reutilizando a estrutura do card, mas com nome específico */
+.estoque-card {
+    flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    padding: 30px;
+    color: var(--color-text-dark);
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 4%;
+    margin-bottom: 10%;
+}
+
+/* O header do estoque e a barra de pesquisa são iguais aos de Compras, 
+   portanto, as classes .compras-header e .search-bar já funcionam! */
+
+/* Barra de Filtros (Botões no topo do card) */
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    
+}
+
+.home-button {
+    text-decoration: none;
+    color: var(--color-dark-green);
+    font-size: 1.5em;
+    transition: color 0.2s;
+}
+
+.home-button:hover {
+    color: var(--color-medium-green);
+}
+
+
+
+
+
+.filter-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--color-white);
+    background-color: var(--color-dark-green); /* Cor padrão dos botões */
+    transition: background-color 0.2s, opacity 0.2s;
+    font-size: 0.9em;
+}
+
+.filter-button:hover {
+    opacity: 0.9;
+    background-color: #38761d;
+}
+
+.filter-button.active {
+    background-color: #38761d;
+    margin-top: 15px; /* Reduzido de 10% para 15px */ 
+    margin-bottom: 15px;
+    padding-top: 5px;
+}
+.filter-button.in-stock {
+    background-color: #38761d; 
+    margin-bottom: 15px;
+    margin-top: 15px; /* Reduzido de 10% para 15px */ 
+}
+
+.filter-button.low-stock {
+    background-color: #38761d; 
+    margin-bottom: 15px;
+    margin-top: 15px; /* Reduzido de 10% para 15px */ 
+}
+
+.filter-button.entry {
+    background-color: #38761d; 
+    margin-bottom: 15px;
+    margin-top: 15px; /* Reduzido de 10% para 15px */ 
+}
+
+
+/* Tabela de Estoque (Reutiliza table-container e thead, mas ajusta os status) */
+
+/* Estilos de Status (Cores Específicas para Estoque) */
+.status.in-stock {
+    background-color: #6aa84f; /* Verde Escuro */
+}
+
+.status.low-stock {
+    background-color: #f1c232; /* Amarelo/Creme Claro */
+  
+}
+
+.status.sold-out {
+    background-color: #cc0000; /* Vermelho Forte */
+}
+.barra{
+     background-color: #38761d; 
+}
+
+
+
+
+
+
+/*======== logistica =============*/
+
+/* Reutiliza a estrutura base do card */
+.logistica-card {
+   flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    padding: 30px;
+    color: var(--color-text-dark);
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 4%;
+    margin-bottom: 10%;
+}
+
+/* Header (igual aos outros cards) */
+.logistica-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.logistica-header h1 {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* Filtros (Dropdowns) */
+.logistica-filters {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.logistica-filters label {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: var(--color-text-dark);
+}
+
+.dropdown {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--color-white);
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+/* Layout de Duas Colunas */
+.logistica-content {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.map-column {
+    flex: 2; /* Ocupa 2/3 da largura */
+    min-width: 0;
+}
+
+.details-column {
+    flex: 1; /* Ocupa 1/3 da largura */
+    padding-left: 10px;
+}
+
+/* Placeholder do Mapa (para simular a área do mapa) */
+.map-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 400px; /* Garante uma altura mínima para o mapa */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Simulação da Imagem do Mapa */
+.map-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Usando um filtro para simular o estilo de mapa da imagem, 
+       mas você deve usar uma imagem real ou um serviço de mapa. */
+    filter: grayscale(10%) contrast(110%); 
+}
+
+
+/* Estilos de Detalhes */
+.details-column h3 {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    color: var(--color-text-dark);
+}
+
+.details-column p {
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #555;
+}
+
+.status-tracking {
+    font-weight: bold;
+    color: var(--color-dark-green);
+    margin-bottom: 20px;
+}
+
+/* Linha do Tempo (Rastreador) */
+.timeline {
+    position: relative;
+    padding: 10px 0 0 15px;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-item .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ccc;
+    position: absolute;
+    left: -22px;
+    top: 5px;
+    z-index: 2;
+}
+
+.timeline-item .line {
+    position: absolute;
+    left: -17px;
+    top: 17px;
+    bottom: -30px;
+    width: 2px;
+    background-color: #ccc;
+    z-index: 1;
+}
+
+/* Estilos de item completo/ativo */
+.timeline-item.completed .dot {
+    background-color: var(--color-dark-green);
+}
+
+.timeline-item.active .dot {
+    background-color: var(--color-dark-green);
+    border: 2px solid var(--color-dark-green);
+    background-color: var(--color-light-cream);
+}
+
+.timeline-item.completed .line {
+    background-color: var(--color-dark-green);
+}
+
+.timeline-item.completed + .timeline-item.active .line,
+.timeline-item.active .line {
+    background: linear-gradient(to bottom, var(--color-dark-green) 50%, #ccc 50%); /* Simula a linha que muda de cor */
+    background-size: 100% 200%;
+    background-position: 0 100%;
+}
+
+.timeline-item.active .line {
+    background-position: 0 0; 
+}
+
+/* Remove a linha do último item */
+.timeline-item:last-child .line {
+    display: none;
+}
+
+.timeline-item .info {
+    margin-left: 10px;
+}
+
+.timeline-item .info p {
+    margin: 0;
+    line-height: 1.2;
+}
+
+.timeline-item .date {
+    font-size: 0.8em;
+    color: #999;
+}
+
+
+
+/*========= relatorios ===========*/
+
+
+
+/* Reutiliza a estrutura base do card */
+.relatorios-card {
+
+    flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    padding: 30px;
+    color: var(--color-text-dark);
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 4%;
+    margin-bottom: 10%;
+  
+}
+
+/* Header (igual aos outros cards) */
+.relatorios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.relatorios-header h1 {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* Filtros de Relatório */
+.relatorios-filters {
+    display: flex;
+    align-items: flex-end; /* Alinha os botões e selects na parte inferior */
+    gap: 25px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.dropdown {
+    /* Reutiliza o estilo do dropdown da Logística */
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--color-white);
+    font-size: 0.9em;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+/* Campo de Período (com Ícone) */
+.date-input-group {
+    position: relative;
+}
+
+.date-input {
+    padding: 8px 30px 8px 10px; /* Espaço para o ícone */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9em;
+    min-width: 180px;
+}
+
+
+
+/* Botões de Geração/Exportação */
+.action-buttons-group {
+    display: flex;
+    gap: 10px;
+    /* Alinhamento superior com o flex-end do container principal */
+    padding-bottom: 2px; 
+}
+
+.action-button.generate {
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
+    font-weight: bold;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.action-button.export-pdf {
+    background-color: #cc0000; /* Vermelho para PDF */
+    color: var(--color-white);
+    font-weight: bold;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.action-button:hover {
+    opacity: 0.9;
+}
+
+
+/* --- Área dos Gráficos --- */
+
+.charts-area {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.chart-container {
+    padding: 30px;
+    border-radius: 5px;
+}
+
+.chart-container h2 {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* 1. Gráfico de Barras */
+.bar-chart {
+    flex: 2; /* Ocupa 2/3 do espaço */
+    min-height: 400px;
+}
+
+.bar-chart .chart-content {
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+}
+
+.y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80%; /* Altura da área do gráfico */
+    margin-right: 10px;
+    font-size: 0.8em;
+    color: black;
+    text-align: right;
+    position: relative;
+    padding-bottom: 20px; /* Espaço para os rótulos X */
+}
+
+.bars {
+    display: flex;
+    align-items: flex-end;
+    flex-grow: 1;
+    gap: 15px;
+    height: 80%; /* Altura da área do gráfico */
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.bar {
+    width: 30px;
+    background-color: var(--color-dark-green);
+    position: relative;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    transition: height 0.5s;
+    flex-shrink: 0;
+}
+
+.bar::after {
+    content: attr(title); /* Rótulo X (Jan, Fev, etc.) */
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8em;
+    color: #555;
+}
+
+/* 2. Gráfico de Pizza */
+.pie-chart {
+    flex: 1; /* Ocupa 1/3 do espaço */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 250px;
+}
+
+.pie-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+    flex-grow: 1;
+}
+
+.pie-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #f0f0f0; /* Fundo padrão */
+}
+
+/* SIMULAÇÃO DO GRÁFICO DE PIZZA (Cone-gradient) */
+.pie {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    /* 65% Milho (Verde escuro) e 35% Feijão (Verde claro) */
+    background: conic-gradient(
+        var(--color-dark-green) 0% 65%, 
+        #6aa84f 65% 100%
+    );
+}
+
+/* Legenda */
+.legend {
+    text-align: left;
+    font-size: 0.9em;
+}
+
+.legend p {
+    margin: 5px 0;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 5px;
+}
+
+.legend-color.milho {
+    background-color: var(--color-dark-green);
+}
+
+.legend-color.feijao {
+    background-color: #6aa84f;
+}
+
+
+
+/*============= QRcode============*/
+
+
+/* --- ESTILOS ADICIONAIS PARA A TELA DE QR CODE --- */
+
+/* Reutiliza a estrutura base do card */
+.qrcode-card {
+
+    flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    padding: 30px;
+    color: var(--color-text-dark);
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 4%;
+    margin-bottom: 10%
+   
+}
+
+/* Header (igual aos outros cards) */
+.qrcode-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.qrcode-header h1 {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* Barra de Pesquisa do Lote (Igual à search-bar, mas com nome de classe diferente para distinção) */
+.search-lote-bar {
+    position: relative;
+    margin-bottom: 25px;
+    width: 50%; /* Ocupa metade da largura do card, como na imagem */
+}
+
+.search-lote-bar input {
+    width: 100%;
+    padding: 10px 10px 10px 40px; /* Espaço para o ícone */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.search-lote-bar i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+/* Layout de Duas Colunas para QR Code e Detalhes */
+.qrcode-content {
+    display: flex;
+    gap: 30px;
+    flex-grow: 1;
+}
+
+.qrcode-column {
+    flex: 1; /* Ocupa metade */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.qrcode-details {
+    flex: 1; /* Ocupa metade */
+    padding-left: 20px;
+    border-left: 1px solid #eee; /* Separador sutil */
+}
+
+/* Placeholder do QR Code (Apenas simulação) */
+.qr-code-placeholder {
+    width: 80%;
+    max-width: 250px;
+    height: auto;
+    background-color: var(--color-white); 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    padding: 40px;
+    /* Para simular a área do QR code, usando o ícone grande */
+}
+
+.large-qrcode-icon {
+    font-size: 8em; 
+    color: #000;
+}
+
+
+/* Estilos de Detalhes (reutilizados e adaptados) */
+.qrcode-details h3 {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    color: var(--color-text-dark);
+}
+
+.qrcode-details p {
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #555;
+}
+
+.qrcode-details .status {
+    /* Reutiliza o estilo de status da tela de Compras */
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    color: var(--color-white);
+    font-weight: bold;
+    font-size: 0.8em;
+    white-space: nowrap;
+    background-color: #6aa84f; /* Verde Concluída */
+}
+
+.pdf-link {
+    display: inline-block;
+    color: #2b78e4; /* Azul para links */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.pdf-link:hover {
+    text-decoration: underline;
+}
+
+.status-active {
+    font-weight: bold; /* Destaca a etapa atual do percurso */
+    color: var(--color-dark-green) !important;
+}
+
+
+
+/*========== AUDITORIA =========*/
+
+
+
+/* Reutiliza a estrutura base do card */
+.auditoria-card {
+
+    flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    padding: 30px;
+    color: var(--color-text-dark);
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 4%;
+    margin-bottom: 10%
+   
+}
+
+/* Header (igual aos outros cards) */
+.auditoria-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.auditoria-header h1 {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* Filtros de Auditoria (Reaproveita o estilo dos Relatórios) */
+.auditoria-filters {
+    display: flex;
+    gap: 25px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+
+
+/* --- Conteúdo Principal (Documentos e Processo) --- */
+.auditoria-content {
+    display: flex;
+    gap: 30px;
+    flex-grow: 1;
+    margin-top: 10px;
+}
+
+/* Bloco de Documentos (Botões) */
+.documents-block {
+    flex: 1;
+    padding: 20px;
+    background-color: #f5f5f5; /* Fundo cinza claro sutil */
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    max-width: 300px; /* Limita a largura para seguir o design */
+}
+
+.doc-button {
+    width: 100%;
+    padding: 12px 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--color-white);
+    background-color: var(--color-medium-green);
+    transition: background-color 0.2s;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.doc-button:hover {
+    background-color: var(--color-dark-green);
+    color: rgba(248, 231, 208, 1)
+}
+
+/* Bloco do Processo Licitatório */
+.licitacao-block {
+    flex: 2;
+    padding: 20px;
+    background-color: var(--color-light-cream); /* Fundo branco/creme */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    /* Adiciona sombra para destacar (opcional) */
+    box-shadow: 0 2px 4px ; 
+    max-height: 250px;
+    overflow: hidden;
+}
+
+.licitacao-title {
+    font-weight: bold;
+   
+    font-size: 1em;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.licitacao-text {
+    font-size: 0.9em;
+    color: #555;
+    line-height: 1.5;
+}
+
+
+/*============= CADASTRO ================*/
+
+/* --- ESTILOS ADICIONAIS PARA A TELA DE CADASTRO --- */
+
+.cadastro-card {
+    flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    padding: 30px;
+    color: var(--color-text-dark);
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 4%;
+    margin-bottom: 10%
+
+}
+
+.cadastro-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.cadastro-header h1 {
+    font-size: 1.8em;
+    font-weight: bold;
+   
+}
+
+/* Botões de Tab (Tipo de Cadastro) */
+.cadastro-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd; /* Linha sutil abaixo dos botões */
+    
+    
+}
+
+.tab-button {
+    padding: 8px 15px;
+    border: none;
+    background-color: #f0f0f0; /* Cinza claro, não selecionado */
+    color: var(--color-text-dark);
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px 5px 0 0;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 0.85em;
+    border-bottom: 3px solid transparent;
+    
+}
+
+.tab-button:hover {
+    background-color: var(--color-medium-green);
+     color: var(--color-text);
+    
+}
+
+.tab-button.active {
+    background-color: var(--color-light-cream); /* Fundo do card */
+    border-bottom: 3px solid var(--color-dark-green); /* Destaque verde */
+    color: var(--color-dark-green);
+    margin-bottom: -1px; /* Para 'esconder' a linha de baixo do container */
+    
+}
+
+.instruction-text {
+    text-align: center;
+    color:var(--color-light-cream);
+    padding: 50px 0;
+    font-size: 1.1em;
+     
+}
+
+
+/* --- ESTILOS DO MODAL (Pop-up) --- */
+
+.modal {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    z-index: 1000; /* Fica acima de todo o conteúdo */
+    left: 0;
+    top: 0;
+    width: 113%;
+    height: 110%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Fundo escuro semi-transparente */
+}
+
+.modal-content {
+    background-color: var(--color-light-cream);
+    margin: 5% auto; /* 5% do topo e centralizado */
+    padding: 30px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 900px; /* Limite máximo de largura */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    margin-bottom: 70%;
+}
+
+.modal-content h2 {
+    font-size: 1.5em;
+    color: var(--color-dark-green);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-dark-green);
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* --- ESTILOS DO FORMULÁRIO (Replicando a imagem) --- */
+.cadastro-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px 2%; /* Espaçamento entre as linhas e colunas */
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px; /* Ajusta o espaçamento vertical */
+}
+
+.form-row label {
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-row input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+/* Definição de Larguras */
+.form-row.half {
+    width: 49%;
+}
+
+.form-row.full {
+    width: 100%;
+}
+
+.form-row.quarter {
+    width: 23.5%;
+}
+
+/* Ações (Botões Salvar e Cancelar) */
+.form-actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.action-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--color-white);
+    transition: opacity 0.2s;
+}
+
+.action-button.save {
+    background-color: var(--color-dark-green);
+}
+
+.action-button.cancel {
+    background-color: #666;
+}
+
+.action-button:hover {
+    opacity: 0.9;
+}
+
+/* --- ESTILOS ADICIONAIS DE FORMULÁRIO (Ajustando textarea e select) --- */
+
+/* Ajuste o input, textarea e select para terem o mesmo estilo visual */
+.form-row input,
+.form-row textarea,
+.form-row select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9em;
+    width: 100%; /* Garante que ocupem a largura total do seu form-row */
+    box-sizing: border-box; /* Inclui padding e border na largura total */
+    /* Garante que o select tenha a mesma altura */
+    height: 35px;
+}
+
+.form-row textarea {
+    resize: vertical; /* Permite redimensionar apenas verticalmente */
+}
+
+
+
+
+
+
+   /*========= PEDIDO_COMPRAS ============*/
+
+
+
+/* Reutiliza a estrutura base do card */
+.pedido-card {
+
+    flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    padding: 30px;
+    color: var(--color-text-dark);
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 4%;
+    margin-bottom: 10%
+   
+}
+
+/* Header (igual aos outros cards) */
+.pedido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.pedido-header h1 {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* Botões de Tab (Fornecedor / Produto) - Estilos reutilizados do Cadastro */
+.pedido-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd; 
+}
+
+/* O estilo .tab-button.active e .tab-button (do Cadastro) já deve funcionar aqui. */
+
+
+/* Formulário Pedido de Compra */
+.pedido-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px 2%; /* Espaçamento entre as linhas e colunas */
+    flex-grow: 1;
+}
+
+
+
+   /*===========LOGIN===================*/
+  
+/* Fundo principal */
+body {
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+/* Área verde atrás */
+.login-bg {
+    background: #0f2f1f;
+    width: 60%;
+    height: 80vh;
+    border-radius: 10px;
+    margin: 2rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card branco */
+.login-card {
+    background: white;
+    width: 350px;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* Ícone superior */
+.login-icon {
+    font-size: 2.5rem;
+    color: #0f2f1f;
+    margin-bottom: 0.5rem;
+}
+
+/* Título */
+.login-title {
+    font-size: 1.8rem;
+    color: #0f2f1f;
+    margin-bottom: 2rem;
+}
+
+/* Inputs */
+label {
+    text-align: left;
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+    color: #123d1f;
+}
+
+input {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #1d492a;
+    padding: 0.4rem;
+    margin-bottom: 1rem;
+    outline: none;
+    background: transparent;
+    font-size: 1rem;
+}
+
+/* Links */
+.links {
+    text-align: left;
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.links a {
+    text-decoration: none;
+    color: #0f2f1f;
+    font-weight: bold;
+}
+
+/* Botão */
+.login-btn {
+    width: 100%;
+    background: #1d492a;
+    color: white;
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.login-btn:hover {
+    background: #11371d;
+}
+
+
+
+/*======== TRASPARENCIA =======*/
+
+/* Fundo principal */
+.body-1 {
+    margin: 0;
+    padding: 0;
+    background: #1b2f24; 
+    font-family: Arial, sans-serif;
+    color: #f5e9c9; 
+}
+
+/* Caixa central */
+.Dw-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box {
+    text-align: center;
+}
+
+/* Títulos */
+h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    line-height: 1.4;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 40px;
+    line-height: 1.3;
+}
+
+/* Botões */
+.btn-area {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+}
+
+.btn {
+    background: #f5e9c9;
+    color: #1b2f24;
+    padding: 10px 25px;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+}
+
+
+
+/*======= licitação ==========*/
+
+.body-2{
+    margin: 0;
+    padding: 0;
+    background: #1b2f24; /* fundo verde escuro */
+    font-family: Arial, sans-serif;
+    color: #1b2f24;
+}
+
+.pt-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.card-bb {
+    flex-grow: 1;
+    background-color: var(--color-light-cream);
+    border-radius: 10px;
+    padding: 30px;
+    color: var(--color-text-dark);
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 4%;
+    margin-bottom: 10%;
+}
+
+.titulo {
+    color: #1b2f24;
+    border-bottom: 3px solid #1b2f24;
+    width: fit-content;
+    padding-bottom: 4px;
+    margin-bottom: 30px;
+}
+
+/* duas colunas lado a lado */
+.conteudo {
+    display: flex;
+    gap: 40px;
+}
+
+.coluna {
+    width: 50%;
+}
+
+h3 {
+    margin-bottom: 10px;
+    color: #1b2f24;
+}
+
+p {
+    line-height: 1.4;
+    font-size: 14.5px;
+}
+
+
+
+/*========== governaça ========*/
+
+/* Estilo exclusivo da página de Governança */
+/* ================================
+   BODY
+================================ */
+.body-2 {
+    margin: 0;
+    padding: 0;
+    background: #1b2f24; /* fundo verde escuro */
+    font-family: Arial, sans-serif;
+    color: #1b2f24;
+}
+
+/* ================================
+   CONTAINER PRINCIPAL
+================================ */
+
+
+/* ================================
+   CARD PRINCIPAL
+================================ */
+.card-cd {
+    margin-left: 20%;
+    background: #ffffff;
+    width: 60%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-right: 10%;
+    margin-top: 5%;
+  
+}
+
+/* ================================
+   TÍTULO
+================================ */
+.titulo {
+    color: #1b2f24;
+    border-bottom: 3px solid #1b2f24;
+    width: fit-content;
+    padding-bottom: 4px;
+}
+
+/* ================================
+   TEXTO
+================================ */
+.conteudo p {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 18px;
+}
+
+.button-2{
+    background-color: #0f2f1f;
+     margin-left: 87%;
+     color: white;
+     margin-bottom: 3%;
+     padding: 15px;
+     padding-left: 3%;
+     padding-right: 3%;
+     border-radius: 10px;
+     text-align: center;
+     font-family:  Arial, sans-serif;
+     
+}
+  
+
+.button-2:hover {
+    
+    transform: scale(1.05);
+}
+

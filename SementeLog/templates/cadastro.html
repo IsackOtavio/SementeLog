@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SementeLog Cadastro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <span class="home-link"></span>
+            </header>
+            
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            
+            <nav class="menu">
+                <a href="{{ url_for('compras') }}" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="{{ url_for('estoque') }}" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="{{ url_for('logistica') }}" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="{{ url_for('relatorios') }}" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="{{ url_for('qrcode') }}" class="menu-item"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+                <a href="{{ url_for('auditoria') }}" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+                <a href="{{ url_for('cadastro') }}" class="menu-item active"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <div class="top-bar">
+                <div class="spacer"></div>
+                <div class="user-info">
+                    <span>Roberto Silva</span>
+                    <i class="fa-solid fa-user-circle user-icon"></i>
+                </div>
+            </div>
+
+            <div class="cadastro-card">
+                <div class="cadastro-header">
+                    <h1>Cadastro</h1>
+        
+                </div>
+
+                <div class="cadastro-tabs">
+                    <button id="btn-fornecedor" class="tab-button" onclick="openModal('fornecedorModal')">FORNECEDOR</button>
+                    <button id="btn-produto" class="tab-button" onclick="openModal('produtoModal')">PRODUTO</button>
+                    <button id="btn-cooperativa" class="tab-button" onclick="openModal('cooperativaModal')">COOPERATIVA</button>
+                    <button id="btn-colaborador" class="tab-button" onclick="openModal('colaboradorModal')">COLABORADOR</button>
+                </div>
+                
+                <p class="instruction-text">Clique em uma das opções acima para iniciar o cadastro.</p>
+                
+            </div>
+        </main>
+    </div>
+
+    <div id="fornecedorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('fornecedorModal')">&times;</span>
+            <h2>Cadastro de Fornecedor</h2>
+            
+            <form class="cadastro-form">
+                <div class="form-row half"><label>CNPJ</label><input type="text"></div>
+                <div class="form-row half"><label>RAZÃO SOCIAL</label><input type="text"></div>
+                
+                <div class="form-row full"><label>ENDEREÇO (RUA)</label><input type="text"></div>
+
+                <div class="form-row quarter"><label>NÚMERO</label><input type="text"></div>
+                <div class="form-row quarter"><label>BAIRRO</label><input type="text"></div>
+                <div class="form-row quarter"><label>CIDADE</label><input type="text"></div>
+                <div class="form-row quarter"><label>ESTADO</label><input type="text"></div>
+
+                <div class="form-row quarter"><label>CEP</label><input type="text"></div>
+                <div class="form-row quarter"><label>TELEFONE</label><input type="text"></div>
+                <div class="form-row quarter"><label>VENDEDOR</label><input type="text"></div>
+                <div class="form-row quarter"><label>E-MAIL</label><input type="text"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="action-button save">EDITAR</button>
+                    <button type="submit" class="action-button save">SALVAR</button>
+                    <button type="button" class="action-button cancel" onclick="closeModal('fornecedorModal')">CANCELAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="produtoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('produtoModal')">&times;</span>
+            <h2>Cadastro de Produto</h2>
+            
+            <form class="cadastro-form">
+               
+               <div class="form-row half"><label>CÓDIGO </label><input type="text"></div>
+                <div class="form-row half"><label>ITEM</label><input type="text"></div>
+                
+                <div class="form-row full"><label>DESCRIÇÃO</label><textarea rows="3"></textarea></div>
+
+                <div class="form-row half"><label>FORNECEDOR</label><input type="text"></div>
+                <div class="form-row half"><label>FABRICANTE</label><input type="text"></div>
+                <div class="form-row half"><label>LOTE</label><input type="text"></div>
+                <div class="form-row half"><label>GRUPO</label><input type="text"></div>
+                <div class="form-row half"><label>SUB-GRUPO</label><input type="text"></div>
+                <div class="form-row half"><label>UNIDADE</label><input type="text"></div>
+                <div class="form-row half"><label>PESO</label><input type="text"></div>
+                
+               
+                <div class="form-actions">
+                    <button type="submit" class="action-button save">EDITAR</button>
+                    <button type="submit" class="action-button save">SALVAR</button>
+                    <button type="button" class="action-button cancel" onclick="closeModal('produtoModal')">CANCELAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="cooperativaModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('cooperativaModal')">&times;</span>
+            <h2>Cadastro de Cooperativa</h2>
+            
+            <form class="cadastro-form">
+                <div class="form-row half"><label>CNPJ</label><input type="text"></div>
+                <div class="form-row half"><label>RAZÃO SOCIAL</label><input type="text"></div>
+                
+                <div class="form-row full"><label>ENDEREÇO (RUA)</label><input type="text"></div>
+
+                <div class="form-row quarter"><label>NÚMERO</label><input type="text"></div>
+                <div class="form-row quarter"><label>BAIRRO</label><input type="text"></div>
+                <div class="form-row quarter"><label>CIDADE</label><input type="text"></div>
+                <div class="form-row quarter"><label>ESTADO</label><input type="text"></div>
+
+                <div class="form-row quarter"><label>CEP</label><input type="text"></div>
+                <div class="form-row half"><label>TELEFONE</label><input type="text"></div>
+                <div class="form-row quarter"><label>E-MAIL</label><input type="text"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="action-button save">EDITAR</button>
+                    <button type="submit" class="action-button save">SALVAR</button>
+                    <button type="button" class="action-button cancel" onclick="closeModal('cooperativaModal')">CANCELAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="colaboradorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('colaboradorModal')">&times;</span>
+            <h2>Cadastro de Colaborador</h2>
+            
+            <form class="cadastro-form">
+                <div class="form-row half"><label>CPF</label><input type="text"></div>
+                <div class="form-row half"><label>NOME COMPLETO</label><input type="text"></div>
+                
+                <div class="form-row half"><label>FUNÇÃO/CARGO</label><input type="text"></div>
+                <div class="form-row half"><label>ENDEREÇO (RUA)</label><input type="text"></div>
+                <div class="form-row half"><label>NUMERO</label><input type="text"></div>
+                <div class="form-row half"><label>BAIRRO</label><input type="text"></div>
+                <div class="form-row half"><label>CIDADE</label><input type="text"></div>
+                <div class="form-row half"><label>ESTADO</label><input type="text"></div>
+                <div class="form-row half"><label>CEP</label><input type="text"></div>
+                 
+              
+                
+                <div class="form-row half"><label>TELEFONE</label><input type="text"></div>
+                <div class="form-row half"><label>VENDEDOR</label><input type="text"></div>
+                <div class="form-row half"><label>E-MAIL</label><input type="text"></div>
+               
+
+                <div class="form-actions">
+                    <button type="submit" class="action-button save">EDITAR</button>
+                    <button type="submit" class="action-button save">SALVAR</button>
+                    <button type="button" class="action-button cancel" onclick="closeModal('colaboradorModal')">CANCELAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+       <script src="{{ url_for('static', filename='script.js') }}"> </script>
+  
+</body>
+</html>

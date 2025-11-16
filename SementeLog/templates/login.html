@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> 
+</head>
+<body>
+
+<div class="login-bg">
+
+    <div class="login-card">
+
+        <div class="login-icon">👤</div>
+
+        <h2 class="login-title">Login</h2>
+
+        <form id="loginForm"> 
+            <label>Usuário</label>
+            <input type="text" id="username" /> 
+
+            <label>Senha</label>
+            <input type="password" id="password" /> 
+
+            <div class="links">
+                <a href="#">Esqueceu senha?</a><br>
+                <a href="{{ url_for('transparencia') }}">Informações Públicas</a>
+            </div>
+            
+            <button type="submit" class="login-btn">Login</button> 
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+    // 1. Obtém os elementos
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    // 2. Adiciona o listener para o evento de SUBMISSÃO
+    loginForm.addEventListener('submit', function(event) {
+        
+        // Impede o envio padrão do formulário
+        event.preventDefault(); 
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        // 3. Verifica a validação
+        if (username === '' || password === '') {
+            // Caso de erro: Mostra o alerta
+            alert('⚠️ Por favor, preencha todos os campos (Usuário e Senha).');
+            
+        } else {
+            // Caso de sucesso: 
+            alert(`✅ Login bem-sucedido! Redirecionando...`);
+            
+         
+            window.location.href = "{{ url_for('index') }}";
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SementeLog Pedido de Compra</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <span class="home-link"></span>
+            </header>
+            
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            
+            <nav class="menu">
+                <a href="{{ url_for('compras') }}" class="menu-item active"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="{{ url_for('estoque') }}" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="{{ url_for('logistica') }}" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="{{ url_for('relatorios') }}" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="{{ url_for('qrcode') }}" class="menu-item"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+                <a href="{{ url_for('auditoria') }}" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+                <a href="{{ url_for('cadastro') }}" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <div class="top-bar">
+                <div class="spacer"></div>
+                <div class="user-info">
+                    <span>Roberto Silva</span>
+                    <i class="fa-solid fa-user-circle user-icon"></i>
+                </div>
+            </div>
+
+            <div class="pedido-card">
+                <div class="pedido-header">
+                    <h1>PEDIDO DE COMPRA</h1>
+
+                </div>
+
+                <div class="pedido-tabs">
+                    <button class="tab-button active" onclick="showForm('fornecedor')">FORNECEDOR</button>
+                    <button class="tab-button" onclick="showForm('produto')">PRODUTO</button>
+                </div>
+                
+                <form id="fornecedor-form" class="pedido-form">
+                    
+                    <div class="form-row half"><label>CNPJ</label><input type="text"></div>
+                    <div class="form-row half"><label>RAZÃO SOCIAL</label><input type="text"></div>
+                    
+                    <div class="form-row full"><label>ENDEREÇO (RUA)</label><input type="text"></div>
+
+                    <div class="form-row quarter"><label>NÚMERO</label><input type="text"></div>
+                    <div class="form-row quarter"><label>BAIRRO</label><input type="text"></div>
+                    <div class="form-row quarter"><label>CIDADE</label><input type="text"></div>
+                    <div class="form-row quarter"><label>ESTADO</label><input type="text"></div>
+
+                    <div class="form-row quarter"><label>CEP</label><input type="text"></div>
+                    <div class="form-row quarter"><label>TELEFONE</label><input type="text"></div>
+                    <div class="form-row quarter"><label>CONTATO</label><input type="text"></div>
+                    <div class="form-row quarter"><label>E-MAIL</label><input type="text"></div>
+
+                    <div class="form-actions">
+<button type="button" class="action-button cancel" onclick="window.location.href='{{ url_for('compras') }}'">CANCELAR</button>
+                    </div>
+                </form>
+
+                <form id="produto-form" class="pedido-form" style="display: none;">
+                   
+                    
+                    <div class="form-row full"><label>CPF</label></div>
+                    <div class="form-row half"><label>ITEM</label><input type="number"></div>
+                    <div class="form-row half"><label>DESCRIÇÃO</label><input type="text"></div>
+                    <div class="form-row full"><label>QUANTIDADE</label><textarea rows="2"></textarea></div>
+                    <div class="form-row half"><label>VALOR UNITÁRIO</label><input type="text"></div>
+                    <div class="form-row half"><label>VALOR TORAL</label><input type="text"></div>
+                    <div class="form-row half"><label>DATA DO PEDIDO</label><input type="date"></div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="action-button save">SALVAR</button>
+                        <button type="button" class="action-button save">GERAR PEDIDO</button>
+                        <button type="button" class="action-button cancel" onclick="window.location.href='{{ url_for('compras') }}'">CANCELAR</button>
+                    </div>
+                </form>
+                
+            </div>
+        </main>
+    </div>
+     <script src="{{ url_for('static', filename='script.js') }}"></script>
+  
+</body>
+</html>

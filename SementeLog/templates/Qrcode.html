@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SementeLog QR Code</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <span class="home-link"></span>
+            </header>
+            
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            
+            <nav class="menu">
+                <a href="{{ url_for('compras') }}" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="{{ url_for('estoque') }}" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="{{ url_for('logistica') }}" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="{{ url_for('relatorios') }}" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="{{ url_for('qrcode') }}" class="menu-item active"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+                <a href="{{ url_for('auditoria') }}" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+                <a href="{{ url_for('cadastro') }}" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <div class="top-bar">
+                <div class="spacer"></div>
+                <div class="user-info">
+                    <span>Roberto Silva</span>
+                    <i class="fa-solid fa-user-circle user-icon"></i>
+                </div>
+            </div>
+
+            <div class="qrcode-card">
+                <div class="qrcode-header">
+                    <h1>QR code Informações</h1>
+                </div>
+
+                <div class="search-lote-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Digite o número do lote">
+                </div>
+
+                <div class="qrcode-content">
+                    
+                    <div class="qrcode-column">
+                        <div class="qr-code-placeholder">
+                            <i class="fa-solid fa-qrcode large-qrcode-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="details-column qrcode-details">
+                        
+                        <h3>Detalhes</h3>
+                        <p>Lote #20231045</p>
+                        <p>Nota Fiscal: 12345</p>
+                        
+                        <br>
+                        
+                        <h3>Dados Principais</h3>
+                        <p>Espécie: Milho</p>
+                        <p>Quantidade: 1200 Kg</p>
+                        <p>Cliente: Fornecedor A</p>
+                        <p>Status: <span class="status concluded">Concluída</span></p>
+
+                        <br>
+
+                        <h3>Nota fiscal</h3>
+                        <p>Número: 123456</p>
+                        <a href="#" class="pdf-link">Ver PDF</a>
+
+                        <br>
+
+                        <h3>Percurso Logístico</h3>
+                        <p>Expedido: 10/03/2025</p>
+                        <p class="status-active">Em Rota: 10/03/2025</p>
+                        <p>Data Entrega: 12/03/2025</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

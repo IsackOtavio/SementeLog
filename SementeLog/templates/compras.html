@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SementeLog Compras</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <span class="home-link"></span>
+            </header>
+            
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            
+            <nav class="menu">
+                <a href="{{ url_for('compras') }}" class="menu-item active"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="{{ url_for('estoque') }}" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="{{ url_for('logistica') }}" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="{{ url_for('relatorios') }}" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="{{ url_for('qrcode') }}" class="menu-item"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+                <a href="{{ url_for('auditoria') }}" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+                <a href="{{ url_for('cadastro') }}" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <div class="top-bar">
+                <div class="spacer"></div>
+                <div class="user-info">
+                    <span>Roberto Silva</span>
+                    <i class="fa-solid fa-user-circle user-icon"></i>
+                </div>
+            </div>
+
+            <div class="compras-card">
+                <div class="compras-header">
+                    <h1>Compras</h1>
+                </div>
+
+                <div class="actions-bar">
+                    <div class="actions-bar">
+                   <a href="{{ url_for('pedido_compra') }}" class="action-button add">Adicionar pedidos</a>
+                     <button class="action-button delete">Excluir</button>
+                    </div>
+                   
+                    <button class="action-button date">Consultar Datas</button>
+                </div>
+                
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Filtrar Pedidos">
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="barra">Data da compra</th>
+                                <th class="barra">Fornecedor</th>
+                                <th class="barra">Valor</th>
+                                <th class="barra">Status</th>
+                                <th class="barra"></th> </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Data da compra">12/04/2024</td>
+                                <td data-label="Fornecedor">Fornecedor A</td>
+                                <td data-label="Valor">R$ 900,00</td>
+                                <td data-label="Status"><span class="status concluded">Concluída</span></td>
+                                <td><button class="update-button green-bg">Atualizar</button></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Data da compra">12/05/2024</td>
+                                <td data-label="Fornecedor">Fornecedor B</td>
+                                <td data-label="Valor">R$ 500,00</td>
+                                <td data-label="Status"><span class="status concluded">Concluída</span></td>
+                                <td><button class="update-button green-bg">Atualizar</button></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Data da compra">12/06/2024</td>
+                                <td data-label="Fornecedor">Fornecedor C</td>
+                                <td data-label="Valor">R$ 500,00</td>
+                                <td data-label="Status"><span class="status concluded">Concluída</span></td>
+                                <td><button class="update-button green-bg">Atualizar</button></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Data da compra">12/07/2024</td>
+                                <td data-label="Fornecedor">Fornecedor D</td>
+                                <td data-label="Valor">R$ 3500,00</td>
+                                <td data-label="Status"><span class="status cancelled">Cancelada</span></td>
+                                <td><button class="update-button red-bg">Atualizar</button></td>
+                            </tr>
+                            <tr>
+                                <td data-label="Data da compra">12/08/2024</td>
+                                <td data-label="Fornecedor">Fornecedor E</td>
+                                <td data-label="Valor">R$ 1500,00</td>
+                                <td data-label="Status"><span class="status pending">Em andamento</span></td>
+                                <td><button class="update-button dark-bg">Atualizar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SementeLog Logística</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <span class="home-link"></span>
+            </header>
+            
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            
+            <nav class="menu">
+                <a href="{{ url_for('compras') }}" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="{{ url_for('estoque') }}" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="{{ url_for('logistica') }}" class="menu-item active"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="{{ url_for('relatorios') }}" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="{{ url_for('qrcode') }}" class="menu-item"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+                <a href="{{ url_for('auditoria') }}" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+                <a href="{{ url_for('cadastro') }}" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <div class="top-bar">
+                <div class="spacer"></div>
+                <div class="user-info">
+                    <span>Roberto Silva</span>
+                    <i class="fa-solid fa-user-circle user-icon"></i>
+                </div>
+            </div>
+
+            <div class="logistica-card">
+                <div class="logistica-header">
+                    <h1>Logística</h1>
+    
+                </div>
+
+                <div class="filters-and-content">
+                    
+                    <div class="logistica-filters">
+                        <label for="especie">Espécie: </label>
+                        <select id="especie" class="dropdown">
+                            <option>Milho</option>
+                            <option>Soja</option>
+                            <option>Feijão</option>
+                        </select>
+                        
+                        <label for="status">Status: </label>
+                        <select id="status" class="dropdown">
+                            <option>Em Transporte</option>
+                            <option>Entregue</option>
+                            <option>Pendente</option>
+                        </select>
+                    </div>
+
+                    <div class="logistica-content">
+                        
+                        <div class="map-column">
+                            <div class="map-placeholder">
+                                <img src="{{ url_for('static', filename='mapa_placeholder.png') }}" alt="Mapa de Rastreamento">
+                            </div>
+                        </div>
+
+                        <div class="details-column">
+                            <h3>Detalhes</h3>
+                            <p>Lote #20231045</p>
+                            <p>Nota Fiscal: 12345</p>
+                            <br>
+                            
+                            <h3>Status</h3>
+                            <p class="status-tracking">Em transporte</p>
+                            
+                            <div class="timeline">
+                                <div class="timeline-item completed">
+                                    <div class="dot"></div>
+                                    <div class="line"></div>
+                                    <div class="info">
+                                        <p><strong>Expedido</strong></p>
+                                        <p class="date">10/03/2025</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item active">
+                                    <div class="dot"></div>
+                                    <div class="line"></div>
+                                    <div class="info">
+                                        <p><strong>Em Rota</strong></p>
+                                        <p class="date">10/03/2025</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="dot"></div>
+                                    <div class="info">
+                                        <p>Entregue</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

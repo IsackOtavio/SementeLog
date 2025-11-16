@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SementeLog Relatórios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <span class="home-link"></span>
+            </header>
+            
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            
+            <nav class="menu">
+                <a href="{{ url_for('compras') }}" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="{{ url_for('estoque') }}" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="{{ url_for('logistica') }}" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="{{ url_for('relatorios') }}" class="menu-item active"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="{{ url_for('qrcode') }}" class="menu-item"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+                <a href="{{ url_for('auditoria') }}" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+                <a href="{{ url_for('cadastro') }}" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <div class="top-bar">
+                <div class="spacer"></div>
+                <div class="user-info">
+                    <span>Roberto Silva</span>
+                    <i class="fa-solid fa-user-circle user-icon"></i>
+                </div>
+            </div>
+
+            <div class="relatorios-card">
+                <div class="relatorios-header">
+                    <h1>Relatórios</h1>
+                </div>
+                
+                <div class="relatorios-filters">
+                    
+                    <div class="filter-group period">
+                        <label>Período</label>
+                        <div class="date-input-group">
+                            <input type="date" class="date-input">
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group type">
+                        <label>Tipo</label>
+                        <select class="dropdown">
+                            <option>Mensal</option>
+                            <option>Semanal</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group sector">
+                        <label>Setor</label>
+                        <select class="dropdown">
+                            <option>Todos</option>
+                            <option>Fornecedor</option>
+                            <option>Estoque</option>
+                            <option>Cooperativa</option>
+                            <option>Compras</option>
+                            <option>Saida</option>
+                        </select>
+                    </div>
+
+                    <div class="action-buttons-group">
+                        <button class="action-button generate">Gerar Relatórios</button>
+                        <button class="action-button export-pdf">Exportar PDF</button>
+                    </div>
+                </div>
+
+                <div class="charts-area">
+                    
+                    <div class="chart-container bar-chart">
+                        <h2>Entregas de Sementes</h2>
+                        <div class="chart-content">
+                            <div class="y-axis">
+                                <span>20.000</span>
+                                <span>15.000</span>
+                                <span>10.000</span>
+                                <span>5.000</span>
+                                <span></span>
+                            </div>
+                            
+                            <div class="bars">
+                                <div class="bar" style="height: 40%;" title="Jan">Jan</div>
+                                <div class="bar" style="height: 50%;" title="Fev">Fev</div>
+                                <div class="bar" style="height: 70%;" title="Mar">Mar</div>
+                                <div class="bar" style="height: 95%;" title="Abr">Abr</div>
+                                <div class="bar" style="height: 45%;" title="Mai">Mai</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container pie-chart">
+                        <h2>Espécies Distribuídas</h2>
+                        <div class="pie-content">
+                            <div class="pie-wrapper">
+                                <div class="pie"></div>
+                            </div>
+                            <div class="legend">
+                                <p><span class="legend-color milho"></span> Milho</p>
+                                <p><span class="legend-color feijao"></span> Feijão</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
