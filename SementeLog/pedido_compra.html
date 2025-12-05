@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SementeLog - Pedido de Compra</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            <nav class="menu">
+                <a href="compras.html" class="menu-item active"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="estoque.html" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="logistica.html" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="relatorios.html" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="qrcode.html" class="menu-item"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+                <a href="auditoria.html" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+                <a href="cadastro.html" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+            </nav>
+        </aside>
+
+        <!-- ÁREA PRINCIPAL -->
+        <main class="content-area">
+            <!-- BARRA SUPERIOR COM NOME DO USUÁRIO E BOTÃO SAIR -->
+            <div class="top-bar">
+                <div class="user-controls">
+                    <span class="user-info-text">
+                        <i class="fa-solid fa-user"></i>
+                        <span id="userDisplayName">Usuário</span>
+                    </span>
+                    <button class="logout-btn" onclick="mostrarModalLogout()">
+                        <i class="fa-solid fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARD PEDIDO -->
+            <div class="pedido-card">
+                <div class="cadastro-header">
+                    <h1>Pedido de compras</h1>
+                    <p class="page-subtitle">
+                        <span id="connection-status" class="status-online">
+                            <i class="fa-solid fa-computer"></i> Sistema Local
+                        </span>
+                        <span style="margin-left: 20px; font-size: 14px; color: #666;">
+                            <span id="contador-pedidos">0</span> pedidos cadastrados
+                        </span>
+                    </p>
+                </div>
+
+                <!-- TABS -->
+                <div class="pedido-tabs">
+                    <button class="tab-button active" onclick="showTab('cadastro')">NOVO PEDIDO</button>
+                    <button class="tab-button" onclick="showTab('lista')">LISTA DE PEDIDOS</button>
+                </div>
+
+                <!-- ABA DE CADASTRO -->
+                <div id="cadastro-tab" class="tab-content">
+                    <!-- SUB-TABS -->
+                    <div class="sub-tabs">
+                        <button class="sub-tab-button active" onclick="showForm('fornecedor')">FORNECEDOR</button>
+                        <button class="sub-tab-button" onclick="showForm('produto')">PRODUTO</button>
+                    </div>
+
+                    <!-- FORMULÁRIO FORNECEDOR -->
+                    <form id="fornecedor-form" class="pedido-form">
+                        <input type="hidden" id="fornecedor-id" name="id">
+                        
+                        <div class="input-row">
+                            <div class="input-group flex-2">
+                                <label>CNPJ <span class="required">*</span></label>
+                                <input type="text" name="cnpj" id="cnpj" placeholder="📇 00.000.000/0001-00" 
+                                       oninput="formatarCNPJ(this)" required>
+                            </div>
+                            <div class="input-group flex-3">
+                                <label>RAZÃO SOCIAL <span class="required">*</span></label>
+                                <input type="text" name="razao_social" id="razao_social" 
+                                       placeholder="📝 Nome completo da empresa" required>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group flex-5">
+                                <label>ENDEREÇO (RUA)</label>
+                                <input type="text" name="endereco" id="endereco" 
+                                       placeholder="🛣️ Rua, Avenida, etc.">
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group flex-1">
+                                <label>NÚMERO</label>
+                                <input type="text" name="numero" id="numero" placeholder="#️⃣ 123">
+                            </div>
+                            <div class="input-group flex-2">
+                                <label>BAIRRO</label>
+                                <input type="text" name="bairro" id="bairro" placeholder="📍 Bairro">
+                            </div>
+                            <div class="input-group flex-2">
+                                <label>CIDADE</label>
+                                <input type="text" name="cidade" id="cidade" placeholder="🏙️ Cidade">
+                            </div>
+                            <div class="input-group flex-1">
+                                <label>ESTADO</label>
+                                <select name="estado" id="estado">
+                                    <option value="">Selecione</option>
+                                    <option value="AC">AC</option>
+                                    <option value="AL">AL</option>
+                                    <option value="AP">AP</option>
+                                    <option value="AM">AM</option>
+                                    <option value="BA">BA</option>
+                                    <option value="CE">CE</option>
+                                    <option value="DF">DF</option>
+                                    <option value="ES">ES</option>
+                                    <option value="GO">GO</option>
+                                    <option value="MA">MA</option>
+                                    <option value="MT">MT</option>
+                                    <option value="MS">MS</option>
+                                    <option value="MG">MG</option>
+                                    <option value="PA">PA</option>
+                                    <option value="PB">PB</option>
+                                    <option value="PR">PR</option>
+                                    <option value="PE">PE</option>
+                                    <option value="PI">PI</option>
+                                    <option value="RJ">RJ</option>
+                                    <option value="RN">RN</option>
+                                    <option value="RS">RS</option>
+                                    <option value="RO">RO</option>
+                                    <option value="RR">RR</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SP">SP</option>
+                                    <option value="SE">SE</option>
+                                    <option value="TO">TO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group flex-1">
+                                <label>CEP</label>
+                                <input type="text" name="cep" id="cep" placeholder="✉️ 00000-000" 
+                                       oninput="formatarCEP(this)">
+                            </div>
+                            <div class="input-group flex-1">
+                                <label>TELEFONE</label>
+                                <input type="text" name="telefone" id="telefone" 
+                                       placeholder="📞 (00) 0000-0000" oninput="formatarTelefone(this)">
+                            </div>
+                            <div class="input-group flex-2">
+                                <label>CONTATO</label>
+                                <input type="text" name="contato" id="contato" 
+                                       placeholder="👔 Nome do contato">
+                            </div>
+                            <div class="input-group flex-3">
+                                <label>E-MAIL</label>
+                                <input type="email" name="email" id="email" 
+                                       placeholder="@ email@empresa.com">
+                            </div>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="button" onclick="salvarFornecedor()" class="action-button save">
+                                <i class="fa-solid fa-save"></i> SALVAR FORNECEDOR
+                            </button>
+                            <button type="button" onclick="buscarFornecedorPorCNPJ()" class="action-button search">
+                                <i class="fa-solid fa-search"></i> BUSCAR
+                            </button>
+                            <button type="button" class="action-button secondary" onclick="limparFormularioFornecedor()">
+                                <i class="fa-solid fa-eraser"></i> LIMPAR
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- FORMULÁRIO PRODUTO -->
+                    <form id="produto-form" class="pedido-form" style="display: none;">
+                        <input type="hidden" id="produto-id" name="id">
+                        
+                        <div class="input-row">
+                            <div class="input-group flex-1">
+                                <label>CÓDIGO <span class="required">*</span></label>
+                                <input type="text" name="codigo" id="codigo" 
+                                       placeholder="📊 Código do produto" required>
+                            </div>
+                            <div class="input-group flex-4">
+                                <label>DESCRIÇÃO <span class="required">*</span></label>
+                                <input type="text" name="descricao" id="descricao" 
+                                       placeholder="📄 Descrição detalhada" required>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group flex-2">
+                                <label>QUANTIDADE <span class="required">*</span></label>
+                                <input type="number" name="quantidade" id="quantidade" 
+                                       placeholder="📦 Quantidade" min="1" required
+                                       oninput="calcularValorTotal()">
+                            </div>
+                            <div class="input-group flex-2">
+                                <label>VALOR UNITÁRIO <span class="required">*</span></label>
+                                <input type="text" name="valor_unitario" id="valor_unitario" 
+                                       placeholder="💵 R$ 0,00" required 
+                                       oninput="formatarMoeda(this); calcularValorTotal()">
+                            </div>
+                            <div class="input-group flex-2">
+                                <label>VALOR TOTAL</label>
+                                <input type="text" name="valor_total" id="valor_total" 
+                                       placeholder="🧮 R$ 0,00" readonly>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group flex-3">
+                                <label>DATA DO PEDIDO <span class="required">*</span></label>
+                                <input type="date" name="data_pedido" id="data_pedido" required>
+                            </div>
+                            <div class="input-group flex-3">
+                                <label>FORNECEDOR</label>
+                                <select id="fornecedor-select" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                                    <option value="">Selecione um fornecedor</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="button" onclick="salvarPedido()" class="action-button save">
+                                <i class="fa-solid fa-cart-plus"></i> SALVAR PEDIDO
+                            </button>
+                            <button type="button" class="action-button secondary" onclick="limparFormularioProduto()">
+                                <i class="fa-solid fa-eraser"></i> LIMPAR
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ABA DE LISTA DE PEDIDOS -->
+                <div id="lista-tab" class="tab-content" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0;">📋 Pedidos Cadastrados</h3>
+                        <button onclick="exportarPedidos()" class="action-button" style="background: #28a745;">
+                            <i class="fa-solid fa-download"></i> Exportar
+                        </button>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <input type="text" id="busca-pedidos" placeholder="🔍 Buscar por código, descrição ou fornecedor..." 
+                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"
+                               oninput="filtrarPedidos()">
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="tabela-pedidos" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f8f9fa;">
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Código</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Descrição</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Quantidade</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Valor Unit.</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Valor Total</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Fornecedor</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Data</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Status</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-pedidos-body">
+                                <!-- Os pedidos serão inseridos aqui pelo JavaScript -->
+                                <tr id="sem-pedidos">
+                                    <td colspan="9" style="padding: 20px; text-align: center; color: #6c757d;">
+                                        Nenhum pedido cadastrado ainda. Cadastre seu primeiro pedido!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                        <strong>Resumo:</strong>
+                        <span id="resumo-pedidos">Total: 0 pedidos | Valor total: R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Logout -->
+    <div id="logout-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-door-open"></i> Confirmar Saída</h3>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja sair do sistema?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-logout" class="secondary-btn">Cancelar</button>
+                <button id="confirm-logout" class="login-btn">Sim, Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes do Pedido -->
+    <div id="detalhes-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-eye"></i> Detalhes do Pedido</h3>
+                <button onclick="fecharDetalhes()" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+            <div class="modal-body" id="detalhes-conteudo">
+                <!-- Conteúdo será preenchido pelo JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== VARIÁVEIS GLOBAIS ==========
+        let fornecedores = JSON.parse(localStorage.getItem('fornecedores') || '[]');
+        let produtos = JSON.parse(localStorage.getItem('produtos') || '[]');
+        let pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+
+        // ========== FUNÇÕES DE INICIALIZAÇÃO ==========
+        function mostrarNomeUsuario() {
+            const nome = localStorage.getItem('nome') || localStorage.getItem('usuario') || 'Usuário';
+            document.getElementById('userDisplayName').textContent = nome;
+        }
+
+        function mostrarModalLogout() {
+            document.getElementById('logout-modal').style.display = 'flex';
+        }
+
+        // ========== FUNÇÕES DE FORMATAÇÃO ==========
+        function formatarCNPJ(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 14) value = value.substring(0, 14);
+            
+            if (value.length > 12) {
+                value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d)/, '$1.$2.$3/$4-$5');
+            } else if (value.length > 8) {
+                value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d)/, '$1.$2.$3/$4');
+            } else if (value.length > 5) {
+                value = value.replace(/^(\d{2})(\d{3})(\d)/, '$1.$2.$3');
+            } else if (value.length > 2) {
+                value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+            }
+            
+            input.value = value;
+        }
+
+        function formatarCEP(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 8) value = value.substring(0, 8);
+            if (value.length > 5) {
+                value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+            }
+            input.value = value;
+        }
+
+        function formatarTelefone(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.substring(0, 11);
+            
+            if (value.length === 11) {
+                value = value.replace(/^(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else if (value.length === 10) {
+                value = value.replace(/^(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+            } else if (value.length > 6) {
+                value = value.replace(/^(\d{2})(\d{4})(\d)/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+            }
+            
+            input.value = value;
+        }
+
+        function formatarMoeda(input) {
+            let value = input.value.replace(/\D/g, '');
+            value = (value / 100).toFixed(2);
+            value = 'R$ ' + value.replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            
+            if (value === 'R$ 0,00') {
+                input.value = '';
+            } else {
+                input.value = value;
+            }
+        }
+
+        function parseMoedaParaNumero(valor) {
+            if (!valor) return 0;
+            const limpo = valor.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
+            return parseFloat(limpo) || 0;
+        }
+
+        function formatarNumeroParaMoeda(numero) {
+            return 'R$ ' + numero.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        }
+
+        function formatarData(dataISO) {
+            if (!dataISO) return '';
+            const data = new Date(dataISO);
+            return data.toLocaleDateString('pt-BR');
+        }
+
+        // ========== FUNÇÕES DAS ABAS ==========
+        function showTab(tab) {
+            // Esconde todas as abas
+            document.getElementById('cadastro-tab').style.display = 'none';
+            document.getElementById('lista-tab').style.display = 'none';
+            
+            // Remove classe active de todas as tabs
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            
+            // Mostra a aba selecionada
+            document.getElementById(tab + '-tab').style.display = 'block';
+            event.target.classList.add('active');
+            
+            // Se for a aba de lista, atualiza os pedidos
+            if (tab === 'lista') {
+                carregarPedidos();
+            }
+        }
+
+        function showForm(form) {
+            if (form === 'fornecedor') {
+                document.getElementById('fornecedor-form').style.display = 'block';
+                document.getElementById('produto-form').style.display = 'none';
+            } else {
+                document.getElementById('fornecedor-form').style.display = 'none';
+                document.getElementById('produto-form').style.display = 'block';
+                carregarFornecedoresNoSelect();
+            }
+            
+            // Atualiza sub-tabs
+            document.querySelectorAll('.sub-tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function calcularValorTotal() {
+            const quantidade = parseInt(document.getElementById('quantidade').value) || 0;
+            const valorUnitario = parseMoedaParaNumero(document.getElementById('valor_unitario').value);
+            const valorTotal = quantidade * valorUnitario;
+            document.getElementById('valor_total').value = formatarNumeroParaMoeda(valorTotal);
+        }
+
+        // ========== FUNÇÕES DO FORNECEDOR ==========
+        function carregarFornecedoresNoSelect() {
+            const select = document.getElementById('fornecedor-select');
+            select.innerHTML = '<option value="">Selecione um fornecedor</option>';
+            
+            fornecedores.forEach(fornecedor => {
+                const option = document.createElement('option');
+                option.value = fornecedor.id;
+                option.textContent = fornecedor.razao_social + ' - ' + fornecedor.cnpj;
+                select.appendChild(option);
+            });
+        }
+
+        function buscarFornecedorPorCNPJ() {
+            const cnpj = document.getElementById('cnpj').value.replace(/\D/g, '');
+            
+            if (cnpj.length < 14) {
+                alert('Digite um CNPJ válido (14 dígitos)!');
+                return;
+            }
+
+            const fornecedor = fornecedores.find(f => f.cnpj === cnpj);
+            
+            if (fornecedor) {
+                preencherFormularioFornecedor(fornecedor);
+                alert('Fornecedor encontrado!');
+            } else {
+                alert('Fornecedor não encontrado!');
+            }
+        }
+
+        function preencherFormularioFornecedor(fornecedor) {
+            document.getElementById('fornecedor-id').value = fornecedor.id || '';
+            document.getElementById('cnpj').value = fornecedor.cnpj || '';
+            document.getElementById('razao_social').value = fornecedor.razao_social || '';
+            document.getElementById('endereco').value = fornecedor.endereco || '';
+            document.getElementById('numero').value = fornecedor.numero || '';
+            document.getElementById('bairro').value = fornecedor.bairro || '';
+            document.getElementById('cidade').value = fornecedor.cidade || '';
+            document.getElementById('estado').value = fornecedor.estado || '';
+            document.getElementById('cep').value = fornecedor.cep || '';
+            document.getElementById('telefone').value = fornecedor.telefone || '';
+            document.getElementById('contato').value = fornecedor.contato || '';
+            document.getElementById('email').value = fornecedor.email || '';
+        }
+
+        function limparFormularioFornecedor() {
+            document.getElementById('fornecedor-id').value = '';
+            document.getElementById('cnpj').value = '';
+            document.getElementById('razao_social').value = '';
+            document.getElementById('endereco').value = '';
+            document.getElementById('numero').value = '';
+            document.getElementById('bairro').value = '';
+            document.getElementById('cidade').value = '';
+            document.getElementById('estado').value = '';
+            document.getElementById('cep').value = '';
+            document.getElementById('telefone').value = '';
+            document.getElementById('contato').value = '';
+            document.getElementById('email').value = '';
+        }
+
+        function salvarFornecedor() {
+            const cnpj = document.getElementById('cnpj').value.replace(/\D/g, '');
+            const razaoSocial = document.getElementById('razao_social').value.trim();
+            
+            if (cnpj.length < 14) {
+                alert('CNPJ inválido! Deve ter 14 dígitos.');
+                return;
+            }
+            
+            if (!razaoSocial) {
+                alert('Razão Social é obrigatória!');
+                return;
+            }
+
+            const fornecedorData = {
+                id: document.getElementById('fornecedor-id').value || Date.now().toString(),
+                cnpj: cnpj,
+                razao_social: razaoSocial,
+                endereco: document.getElementById('endereco').value.trim(),
+                numero: document.getElementById('numero').value.trim(),
+                bairro: document.getElementById('bairro').value.trim(),
+                cidade: document.getElementById('cidade').value.trim(),
+                estado: document.getElementById('estado').value,
+                cep: document.getElementById('cep').value.replace(/\D/g, ''),
+                telefone: document.getElementById('telefone').value.replace(/\D/g, ''),
+                contato: document.getElementById('contato').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                data_cadastro: new Date().toISOString()
+            };
+
+            const fornecedorId = document.getElementById('fornecedor-id').value;
+            
+            if (fornecedorId) {
+                // Atualizar
+                const index = fornecedores.findIndex(f => f.id === fornecedorId);
+                if (index !== -1) {
+                    fornecedores[index] = fornecedorData;
+                    alert('Fornecedor atualizado com sucesso!');
+                }
+            } else {
+                // Novo
+                fornecedores.push(fornecedorData);
+                document.getElementById('fornecedor-id').value = fornecedorData.id;
+                alert('Fornecedor salvo com sucesso!');
+                limparFormularioFornecedor();
+            }
+
+            localStorage.setItem('fornecedores', JSON.stringify(fornecedores));
+            atualizarContadores();
+        }
+
+        // ========== FUNÇÕES DO PEDIDO ==========
+        function limparFormularioProduto() {
+            document.getElementById('produto-id').value = '';
+            document.getElementById('codigo').value = '';
+            document.getElementById('descricao').value = '';
+            document.getElementById('quantidade').value = '';
+            document.getElementById('valor_unitario').value = '';
+            document.getElementById('valor_total').value = '';
+            document.getElementById('data_pedido').value = '';
+            document.getElementById('fornecedor-select').value = '';
+        }
+
+        function salvarPedido() {
+            // Validação do fornecedor
+            const fornecedorId = document.getElementById('fornecedor-select').value;
+            if (!fornecedorId) {
+                alert('Selecione um fornecedor!');
+                return;
+            }
+
+            // Validação dos campos
+            const codigo = document.getElementById('codigo').value.trim();
+            const descricao = document.getElementById('descricao').value.trim();
+            const quantidade = parseInt(document.getElementById('quantidade').value) || 0;
+            const valorUnitario = parseMoedaParaNumero(document.getElementById('valor_unitario').value);
+            const dataPedido = document.getElementById('data_pedido').value;
+            
+            if (!codigo || !descricao) {
+                alert('Código e descrição são obrigatórios!');
+                return;
+            }
+            
+            if (quantidade <= 0) {
+                alert('Quantidade deve ser maior que zero!');
+                return;
+            }
+            
+            if (valorUnitario <= 0) {
+                alert('Valor unitário deve ser maior que zero!');
+                return;
+            }
+            
+            if (!dataPedido) {
+                alert('Data do pedido é obrigatória!');
+                return;
+            }
+
+            // Busca fornecedor selecionado
+            const fornecedor = fornecedores.find(f => f.id === fornecedorId);
+            if (!fornecedor) {
+                alert('Fornecedor não encontrado!');
+                return;
+            }
+
+            const pedidoData = {
+                id: Date.now().toString(),
+                fornecedor_id: fornecedorId,
+                fornecedor_nome: fornecedor.razao_social,
+                fornecedor_cnpj: fornecedor.cnpj,
+                codigo: codigo,
+                descricao: descricao,
+                quantidade: quantidade,
+                valor_unitario: valorUnitario,
+                valor_total: parseMoedaParaNumero(document.getElementById('valor_total').value),
+                data_pedido: dataPedido,
+                data_registro: new Date().toISOString(),
+                status: "Pendente",
+                usuario_id: localStorage.getItem('usuario_id') || '1'
+            };
+
+            // Salvar pedido
+            pedidos.push(pedidoData);
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+
+            // Atualizar ou criar produto no estoque
+            const produtoIndex = produtos.findIndex(p => p.codigo === codigo);
+            
+            if (produtoIndex !== -1) {
+                // Atualiza quantidade
+                produtos[produtoIndex].quantidade = (produtos[produtoIndex].quantidade || 0) + quantidade;
+                produtos[produtoIndex].preco_unitario = valorUnitario;
+            } else {
+                // Cria novo produto
+                produtos.push({
+                    id: Date.now().toString(),
+                    codigo: codigo,
+                    descricao: descricao,
+                    quantidade: quantidade,
+                    preco_unitario: valorUnitario,
+                    data_cadastro: new Date().toISOString()
+                });
+            }
+
+            localStorage.setItem('produtos', JSON.stringify(produtos));
+
+            alert('✅ Pedido salvo com sucesso!');
+            limparFormularioProduto();
+            
+            // Atualiza contadores e mostra na lista
+            atualizarContadores();
+            carregarPedidos();
+            
+            // Volta para aba de lista
+            showTab('lista');
+        }
+
+        // ========== FUNÇÕES DA LISTA DE PEDIDOS ==========
+        function carregarPedidos() {
+            const tbody = document.getElementById('lista-pedidos-body');
+            const semPedidos = document.getElementById('sem-pedidos');
+            
+            // Limpa a tabela (exceto a linha "sem pedidos")
+            tbody.innerHTML = '';
+            tbody.appendChild(semPedidos);
+            
+            if (pedidos.length === 0) {
+                semPedidos.style.display = '';
+                atualizarResumo();
+                return;
+            }
+            
+            semPedidos.style.display = 'none';
+            
+            // Ordena pedidos por data (mais recente primeiro)
+            const pedidosOrdenados = [...pedidos].sort((a, b) => 
+                new Date(b.data_pedido) - new Date(a.data_pedido)
+            );
+            
+            pedidosOrdenados.forEach(pedido => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #dee2e6';
+                tr.style.cursor = 'pointer';
+                tr.onclick = () => mostrarDetalhesPedido(pedido.id);
+                
+                tr.innerHTML = `
+                    <td style="padding: 12px;">${pedido.codigo}</td>
+                    <td style="padding: 12px;">${pedido.descricao}</td>
+                    <td style="padding: 12px; text-align: center;">${pedido.quantidade}</td>
+                    <td style="padding: 12px;">${formatarNumeroParaMoeda(pedido.valor_unitario)}</td>
+                    <td style="padding: 12px; font-weight: bold;">${formatarNumeroParaMoeda(pedido.valor_total)}</td>
+                    <td style="padding: 12px;">${pedido.fornecedor_nome}</td>
+                    <td style="padding: 12px;">${formatarData(pedido.data_pedido)}</td>
+                    <td style="padding: 12px;">
+                        <span style="padding: 4px 8px; border-radius: 4px; background: ${pedido.status === 'Pendente' ? '#fff3cd' : '#d4edda'}; color: ${pedido.status === 'Pendente' ? '#856404' : '#155724'}">
+                            ${pedido.status}
+                        </span>
+                    </td>
+                    <td style="padding: 12px;">
+                        <button onclick="event.stopPropagation(); editarPedido('${pedido.id}')" style="background: #ffc107; color: #212529; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-right: 5px;">
+                            <i class="fa-solid fa-edit"></i>
+                        </button>
+                        <button onclick="event.stopPropagation(); excluirPedido('${pedido.id}')" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+            
+            atualizarResumo();
+        }
+
+        function filtrarPedidos() {
+            const termo = document.getElementById('busca-pedidos').value.toLowerCase();
+            const tbody = document.getElementById('lista-pedidos-body');
+            const semPedidos = document.getElementById('sem-pedidos');
+            
+            // Limpa a tabela
+            tbody.innerHTML = '';
+            tbody.appendChild(semPedidos);
+            
+            const pedidosFiltrados = pedidos.filter(pedido => 
+                pedido.codigo.toLowerCase().includes(termo) ||
+                pedido.descricao.toLowerCase().includes(termo) ||
+                pedido.fornecedor_nome.toLowerCase().includes(termo) ||
+                pedido.status.toLowerCase().includes(termo)
+            );
+            
+            if (pedidosFiltrados.length === 0) {
+                semPedidos.style.display = '';
+                semPedidos.innerHTML = '<td colspan="9" style="padding: 20px; text-align: center; color: #6c757d;">Nenhum pedido encontrado com o termo: "' + termo + '"</td>';
+                atualizarResumo(pedidosFiltrados);
+                return;
+            }
+            
+            semPedidos.style.display = 'none';
+            
+            pedidosFiltrados.forEach(pedido => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #dee2e6';
+                tr.style.cursor = 'pointer';
+                tr.onclick = () => mostrarDetalhesPedido(pedido.id);
+                
+                tr.innerHTML = `
+                    <td style="padding: 12px;">${pedido.codigo}</td>
+                    <td style="padding: 12px;">${pedido.descricao}</td>
+                    <td style="padding: 12px; text-align: center;">${pedido.quantidade}</td>
+                    <td style="padding: 12px;">${formatarNumeroParaMoeda(pedido.valor_unitario)}</td>
+                    <td style="padding: 12px; font-weight: bold;">${formatarNumeroParaMoeda(pedido.valor_total)}</td>
+                    <td style="padding: 12px;">${pedido.fornecedor_nome}</td>
+                    <td style="padding: 12px;">${formatarData(pedido.data_pedido)}</td>
+                    <td style="padding: 12px;">
+                        <span style="padding: 4px 8px; border-radius: 4px; background: ${pedido.status === 'Pendente' ? '#fff3cd' : '#d4edda'}; color: ${pedido.status === 'Pendente' ? '#856404' : '#155724'}">
+                            ${pedido.status}
+                        </span>
+                    </td>
+                    <td style="padding: 12px;">
+                        <button onclick="event.stopPropagation(); editarPedido('${pedido.id}')" style="background: #ffc107; color: #212529; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; margin-right: 5px;">
+                            <i class="fa-solid fa-edit"></i>
+                        </button>
+                        <button onclick="event.stopPropagation(); excluirPedido('${pedido.id}')" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+            
+            atualizarResumo(pedidosFiltrados);
+        }
+
+        function atualizarResumo(pedidosArray = pedidos) {
+            const totalPedidos = pedidosArray.length;
+            const valorTotal = pedidosArray.reduce((total, pedido) => total + (pedido.valor_total || 0), 0);
+            
+            document.getElementById('contador-pedidos').textContent = pedidos.length;
+            document.getElementById('resumo-pedidos').innerHTML = 
+                `Total: ${totalPedidos} pedido${totalPedidos !== 1 ? 's' : ''} | ` +
+                `Valor total: ${formatarNumeroParaMoeda(valorTotal)}`;
+        }
+
+        function atualizarContadores() {
+            document.getElementById('contador-pedidos').textContent = pedidos.length;
+        }
+
+        // ========== FUNÇÕES DE AÇÕES DOS PEDIDOS ==========
+        function mostrarDetalhesPedido(pedidoId) {
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            if (!pedido) return;
+            
+            const fornecedor = fornecedores.find(f => f.id === pedido.fornecedor_id);
+            
+            document.getElementById('detalhes-conteudo').innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px; color: #333;">📦 Informações do Pedido</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 150px;"><strong>Código:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${pedido.codigo}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Descrição:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${pedido.descricao}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Quantidade:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${pedido.quantidade} unidades</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Valor Unitário:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${formatarNumeroParaMoeda(pedido.valor_unitario)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Valor Total:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #28a745;">${formatarNumeroParaMoeda(pedido.valor_total)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Data do Pedido:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${formatarData(pedido.data_pedido)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Status:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                                <span style="padding: 4px 8px; border-radius: 4px; background: ${pedido.status === 'Pendente' ? '#fff3cd' : '#d4edda'}; color: ${pedido.status === 'Pendente' ? '#856404' : '#155724'}">
+                                    ${pedido.status}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div>
+                    <h4 style="margin-bottom: 10px; color: #333;">🏢 Informações do Fornecedor</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 150px;"><strong>Razão Social:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${pedido.fornecedor_nome}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>CNPJ:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${pedido.fornecedor_cnpj}</td>
+                        </tr>
+                        ${fornecedor ? `
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Contato:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${fornecedor.contato || 'Não informado'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>Telefone:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${fornecedor.telefone || 'Não informado'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;"><strong>E-mail:</strong></td>
+                            <td style="padding: 8px 0; border-bottom: 1px solid #eee;">${fornecedor.email || 'Não informado'}</td>
+                        </tr>
+                        ` : ''}
+                    </table>
+                </div>
+                
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee;">
+                    <button onclick="editarPedido('${pedido.id}')" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                        <i class="fa-solid fa-edit"></i> Editar Pedido
+                    </button>
+                    <button onclick="alterarStatusPedido('${pedido.id}')" style="background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                        <i class="fa-solid fa-check"></i> Marcar como Recebido
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('detalhes-modal').style.display = 'flex';
+        }
+
+        function fecharDetalhes() {
+            document.getElementById('detalhes-modal').style.display = 'none';
+        }
+
+        function editarPedido(pedidoId) {
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            if (!pedido) return;
+            
+            // Vai para aba de cadastro
+            showTab('cadastro');
+            showForm('produto');
+            
+            // Preenche o formulário
+            document.getElementById('codigo').value = pedido.codigo;
+            document.getElementById('descricao').value = pedido.descricao;
+            document.getElementById('quantidade').value = pedido.quantidade;
+            document.getElementById('valor_unitario').value = formatarNumeroParaMoeda(pedido.valor_unitario);
+            document.getElementById('data_pedido').value = pedido.data_pedido;
+            document.getElementById('fornecedor-select').value = pedido.fornecedor_id;
+            document.getElementById('produto-id').value = pedido.id;
+            
+            calcularValorTotal();
+            
+            alert('Preencha os dados que deseja alterar e clique em "SALVAR PEDIDO" para atualizar.');
+        }
+
+        function excluirPedido(pedidoId) {
+            if (!confirm('Tem certeza que deseja excluir este pedido?')) {
+                return;
+            }
+            
+            // Remove o pedido
+            pedidos = pedidos.filter(p => p.id !== pedidoId);
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+            
+            // Remove o produto associado (opcional)
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            if (pedido) {
+                produtos = produtos.filter(p => p.codigo !== pedido.codigo);
+                localStorage.setItem('produtos', JSON.stringify(produtos));
+            }
+            
+            alert('Pedido excluído com sucesso!');
+            carregarPedidos();
+            atualizarContadores();
+        }
+
+        function alterarStatusPedido(pedidoId) {
+            const pedidoIndex = pedidos.findIndex(p => p.id === pedidoId);
+            if (pedidoIndex === -1) return;
+            
+            pedidos[pedidoIndex].status = pedidos[pedidoIndex].status === 'Pendente' ? 'Recebido' : 'Pendente';
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+            
+            alert(`Status alterado para: ${pedidos[pedidoIndex].status}`);
+            carregarPedidos();
+            fecharDetalhes();
+        }
+
+        function exportarPedidos() {
+            if (pedidos.length === 0) {
+                alert('Não há pedidos para exportar!');
+                return;
+            }
+            
+            let csv = 'Código,Descrição,Quantidade,Valor Unitário,Valor Total,Fornecedor,CNPJ Fornecedor,Data,Status\n';
+            
+            pedidos.forEach(pedido => {
+                csv += `"${pedido.codigo}","${pedido.descricao}",${pedido.quantidade},${pedido.valor_unitario},${pedido.valor_total},"${pedido.fornecedor_nome}","${pedido.fornecedor_cnpj}","${pedido.data_pedido}","${pedido.status}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pedidos_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            alert('Pedidos exportados com sucesso!');
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarNomeUsuario();
+            
+            // Configura data atual
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('data_pedido').value = hoje;
+            document.getElementById('data_pedido').min = hoje;
+            
+            // Verifica autenticação
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Você precisa fazer login primeiro!');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Configura modal de logout
+            const logoutModal = document.getElementById('logout-modal');
+            const confirmLogout = document.getElementById('confirm-logout');
+            const cancelLogout = document.getElementById('cancel-logout');
+
+            confirmLogout.addEventListener("click", () => {
+                localStorage.removeItem('usuario_logado');
+                localStorage.removeItem('usuario_id');
+                localStorage.removeItem('usuario_nome');
+                localStorage.removeItem('usuario_email');
+                localStorage.removeItem('usuario_username');
+                localStorage.removeItem('token');
+                localStorage.removeItem('nome');
+                localStorage.removeItem('usuario');
+                
+                window.location.href = "login.html";
+            });
+
+            cancelLogout.addEventListener("click", () => {
+                logoutModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === logoutModal) {
+                    logoutModal.style.display = 'none';
+                }
+                if (e.target === document.getElementById('detalhes-modal')) {
+                    fecharDetalhes();
+                }
+            });
+            
+            // Atualiza contadores
+            atualizarContadores();
+        });
+    </script>
+</body>
+</html>

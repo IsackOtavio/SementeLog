@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SementeLog Estoque</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo-container">
+            <i class="fa-solid fa-seedling logo-icon"></i>
+            <span class="logo-text">SementeLog</span>
+        </div>
+        <nav class="menu">
+            <a href="compras.html" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+            <a href="estoque.html" class="menu-item active"><i class="fa-solid fa-box-open"></i> Estoque</a>
+            <a href="logistica.html" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+            <a href="relatorios.html" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+            <a href="Qrcode.html" class="menu-item"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+            <a href="auditoria.html" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+            <a href="cadastro.html" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+        </nav>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="content-area">
+        <div class="top-bar">
+            <div class="spacer"></div>
+            <div class="user-controls">
+                <span class="user-info-text">
+                    <i class="fa-solid fa-user"></i>
+                    <span id="userDisplayName">Usuário</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="estoque-card">
+            <div class="cadastro-header">
+                <h1>Estoque</h1>
+                <button onclick="abrirModal()" style="background: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-left: auto;">
+                    <i class="fa-solid fa-plus"></i> Adicionar Produto
+                </button>
+            </div>
+
+            <div class="filter-bar">
+                <button class="filter-button in-stock" onclick="filtrarEstoque('geral')">Geral</button>
+                <button class="filter-button low-stock" onclick="filtrarEstoque('pouco')">Pouco Estoque</button>
+                <a href="entrada_mercadoria.html" class="filter-button entry">Entrada</a>
+                <a href="saida_mercadoria.html" class="filter-button entry">Saída</a>
+            </div>
+
+            <div class="search-bar">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Buscar" oninput="buscarProduto()">
+            </div>
+
+            <div class="table-container">
+                <table class="estoque-table" id="estoque-table">
+                    <thead>
+                        <tr>
+                            <th class="barra">Produto</th>
+                            <th class="barra">Código</th>
+                            <th class="barra">Quantidade</th>
+                            <th class="barra">Status</th>
+                            <th class="barra">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- MODAL -->
+<div id="modal-produto" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000;">
+    <div style="background:white; margin:50px auto; padding:20px; width:400px; border-radius:8px; position:relative; z-index:10001;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3 id="titulo-modal">Adicionar Produto</h3>
+            <button onclick="fecharModal()" style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+        </div>
+        <form id="form-produto">
+            <input type="hidden" id="produto-id">
+            <div style="margin-bottom:15px;">
+                <label>Produto</label>
+                <input type="text" id="nome-produto" required style="width:100%; padding:8px; border:1px solid #ddd;">
+            </div>
+            <div style="margin-bottom:15px;">
+                <label>Código</label>
+                <input type="text" id="codigo-produto" required style="width:100%; padding:8px; border:1px solid #ddd;">
+            </div>
+            <div style="margin-bottom:15px;">
+                <label>Quantidade (Kg)</label>
+                <input type="number" id="quantidade-produto" required style="width:100%; padding:8px; border:1px solid #ddd;">
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button type="submit" style="flex:1; background:#4CAF50; color:white; padding:10px; border:none; border-radius:4px; cursor:pointer;">Salvar</button>
+                <button type="button" onclick="fecharModal()" style="flex:1; background:#6c757d; color:white; padding:10px; border:none; border-radius:4px; cursor:pointer;">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+const API_URL = 'http://localhost:5000/api/estoque';
+
+// Abrir modal
+function abrirModal() {
+    document.getElementById('modal-produto').style.display = 'block';
+    document.getElementById('form-produto').reset();
+    document.getElementById('produto-id').value = '';
+    document.getElementById('titulo-modal').textContent = 'Adicionar Produto';
+}
+
+// Fechar modal
+function fecharModal() {
+    document.getElementById('modal-produto').style.display = 'none';
+}
+
+// Salvar produto
+document.getElementById('form-produto').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const id = parseInt(document.getElementById('produto-id').value);
+    const produto = document.getElementById('nome-produto').value.trim();
+    const codigo = document.getElementById('codigo-produto').value.trim();
+    const quantidade = parseInt(document.getElementById('quantidade-produto').value);
+    const data = { produto, codigo, quantidade };
+
+    try {
+        if(id && !isNaN(id)) {
+            await fetch(`${API_URL}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type':'application/json' },
+                body: JSON.stringify(data)
+            });
+        } else {
+            await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type':'application/json' },
+                body: JSON.stringify(data)
+            });
+        }
+        fecharModal();
+        renderTabela();
+    } catch(err) {
+        console.error(err);
+        alert('Erro ao salvar o produto');
+    }
+});
+
+// Renderizar tabela
+async function renderTabela() {
+    const tbody = document.getElementById('corpo-tabela');
+    tbody.innerHTML = '';
+    try {
+        const res = await fetch(API_URL);
+        const produtos = await res.json();
+        produtos.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${item.produto}</td>
+                <td>${item.codigo}</td>
+                <td>${item.quantidade} Kg</td>
+                <td>${item.quantidade === 0 ? 'Faltando' : item.quantidade <= 300 ? 'Pouco Estoque' : 'Em Estoque'}</td>
+                <td>
+                    <button onclick="editarProdutoSafe(${item.id || 0})" style="margin-right:5px;">Editar</button>
+                    <button onclick="excluirProduto(${item.id || 0})">Excluir</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+// Excluir produto
+async function excluirProduto(id){
+    if(confirm('Deseja realmente excluir este produto?')){
+        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        renderTabela();
+    }
+}
+
+// Editar produto seguro
+async function editarProdutoSafe(id){
+    if(!id || id === 0) return alert('ID do produto inválido');
+
+    abrirModal();
+    document.getElementById('titulo-modal').textContent = 'Carregando...';
+
+    try {
+        const res = await fetch(`${API_URL}/${id}`);
+        if(!res.ok) throw new Error('Produto não encontrado');
+
+        const p = await res.json();
+        if(!p || !p.id) throw new Error('Produto inválido');
+
+        document.getElementById('produto-id').value = p.id;
+        document.getElementById('nome-produto').value = p.produto || '';
+        document.getElementById('codigo-produto').value = p.codigo || '';
+        document.getElementById('quantidade-produto').value = p.quantidade || '';
+        document.getElementById('titulo-modal').textContent = 'Editar Produto';
+    } catch(err){
+        console.error(err);
+        alert('Não foi possível carregar os dados do produto para edição.');
+        fecharModal();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', renderTabela);
+
+// Funções de busca e filtro (você pode adaptar)
+function buscarProduto() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#corpo-tabela tr');
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(input) ? '' : 'none';
+    });
+}
+
+function filtrarEstoque(tipo) {
+    const rows = document.querySelectorAll('#corpo-tabela tr');
+    rows.forEach(row => {
+        const status = row.children[3].innerText;
+        if(tipo === 'geral') row.style.display = '';
+        else if(tipo === 'pouco') row.style.display = status === 'Pouco Estoque' ? '' : 'none';
+    });
+}
+</script>
+</body>
+</html>
