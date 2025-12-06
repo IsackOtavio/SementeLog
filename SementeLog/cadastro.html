@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema SementeLog - Cadastros</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            <nav class="menu">
+                <a href="compras.html" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="estoque.html" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="logistica.html" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="relatorios.html" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="qrcode.html" class="menu-item"><i class="fa-solid fa-qrcode"></i> QR Code</a>
+                <a href="auditoria.html" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+
+                <!-- Menu Cadastro -->
+                <div class="menu-item" id="cadastro-menu" style="cursor: pointer;">
+                    <i class="fa-solid fa-user-plus"></i> Cadastro
+                </div>
+                <div id="dropdown-cadastro" style="display: none; margin-left: 20px;">
+                    <a href="javascript:void(0)" onclick="openModal('fornecedorModal')" class="menu-item">Fornecedor</a>
+                    <a href="javascript:void(0)" onclick="openModal('produtoModal')" class="menu-item">Produto</a>
+                    <a href="javascript:void(0)" onclick="openModal('cooperativaModal')" class="menu-item">Cooperativa</a>
+                    <a href="javascript:void(0)" onclick="openModal('colaboradorModal')" class="menu-item">Colaborador</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <!-- BARRA SUPERIOR COM NOME DO USUÁRIO E BOTÃO SAIR -->
+            <div class="top-bar">
+
+                <div class="user-controls">
+                    <span class="user-info-text">
+                        <i class="fa-solid fa-user"></i>
+                        <span id="userDisplayName">Usuário</span>
+                    </span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fa-solid fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <!-- Área principal com abas -->
+            <div style="padding: 20px;">
+                <!-- Abas para navegação -->
+                <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc;">
+                    <button onclick="mostrarAba('fornecedores')" style="padding: 10px 20px; margin-right: 10px; border: none; background: #f0f0f0; cursor: pointer;">Fornecedores</button>
+                    <button onclick="mostrarAba('produtos')" style="padding: 10px 20px; margin-right: 10px; border: none; background: #f0f0f0; cursor: pointer;">Produtos</button>
+                    <button onclick="mostrarAba('cooperativas')" style="padding: 10px 20px; margin-right: 10px; border: none; background: #f0f0f0; cursor: pointer;">Cooperativas</button>
+                    <button onclick="mostrarAba('colaboradores')" style="padding: 10px 20px; margin-right: 10px; border: none; background: #f0f0f0; cursor: pointer;">Colaboradores</button>
+                </div>
+
+                <!-- Barra de pesquisa -->
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="input-pesquisa" placeholder="Pesquisar..." style="padding: 8px; width: 300px; margin-right: 10px;">
+                    <button onclick="filtrarRegistros()" style="padding: 8px 15px; cursor: pointer;">Pesquisar</button>
+                    <button onclick="limparFiltro()" style="padding: 8px 15px; cursor: pointer;">Limpar</button>
+                </div>
+
+                <!-- Área dos registros -->
+                <div id="aba-fornecedores" class="aba-conteudo">
+                    <h2>Fornecedores Cadastrados</h2>
+                    <div id="fornecedores-lista"></div>
+                </div>
+
+                <div id="aba-produtos" class="aba-conteudo" style="display: none;">
+                    <h2>Produtos Cadastrados</h2>
+                    <div id="produtos-lista"></div>
+                </div>
+
+                <div id="aba-cooperativas" class="aba-conteudo" style="display: none;">
+                    <h2>Cooperativas Cadastradas</h2>
+                    <div id="cooperativas-lista"></div>
+                </div>
+
+                <div id="aba-colaboradores" class="aba-conteudo" style="display: none;">
+                    <h2>Colaboradores Cadastrados</h2>
+                    <div id="colaboradores-lista"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modais (mantidos os mesmos) -->
+    <!-- Fornecedor -->
+    <div id="fornecedorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('fornecedorModal')">&times;</span>
+            <h2>Cadastro de Fornecedor</h2>
+            <form id="formFornecedor" class="cadastro-form">
+                <input type="hidden" id="fornecedorId">
+                <div class="form-row half"><label>CNPJ</label><input type="text" id="fornecedorCnpj" placeholder="00.000.000/0001-00" required></div>
+                <div class="form-row half"><label>RAZÃO SOCIAL</label><input type="text" id="fornecedorRazaoSocial" placeholder="Nome da empresa" required></div>
+                <div class="form-row full"><label>ENDEREÇO (RUA)</label><input type="text" id="fornecedorEndereco" placeholder="Rua Exemplo, 123" required></div>
+                <div class="form-row quarter"><label>NÚMERO</label><input type="text" id="fornecedorNumero" placeholder="123" required></div>
+                <div class="form-row quarter"><label>BAIRRO</label><input type="text" id="fornecedorBairro" placeholder="Centro" required></div>
+                <div class="form-row quarter"><label>CIDADE</label><input type="text" id="fornecedorCidade" placeholder="Cidade Exemplo" required></div>
+                <div class="form-row quarter"><label>ESTADO</label><input type="text" id="fornecedorEstado" placeholder="UF" required></div>
+                <div class="form-row quarter"><label>CEP</label><input type="text" id="fornecedorCep" placeholder="00000-000" required></div>
+                <div class="form-row quarter"><label>TELEFONE</label><input type="text" id="fornecedorTelefone" placeholder="(00) 0000-0000" required></div>
+                <div class="form-row quarter"><label>VENDEDOR</label><input type="text" id="fornecedorVendedor" placeholder="Nome do vendedor" required></div>
+                <div class="form-row quarter"><label>E-MAIL</label><input type="email" id="fornecedorEmail" placeholder="email@exemplo.com" required></div>
+                <div class="form-actions">
+                    <button type="submit" class="action-button save">SALVAR</button>
+                    <button type="button" class="action-button cancel" onclick="closeModal('fornecedorModal')">CANCELAR</button>
+                    <button type="button" class="action-button delete" onclick="excluirFornecedor()" style="display:none;">EXCLUIR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Produto -->
+    <div id="produtoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('produtoModal')">&times;</span>
+            <h2>Cadastro de Produto</h2>
+            <form id="formProduto" class="cadastro-form">
+                <input type="hidden" id="produtoId">
+                <div class="form-row half"><label>CÓDIGO</label><input type="text" id="produtoCodigo" placeholder="Código do produto" required></div>
+                <div class="form-row half"><label>ITEM</label><input type="text" id="produtoItem" placeholder="Nome do item" required></div>
+                <div class="form-row full"><label>DESCRIÇÃO</label><textarea id="produtoDescricao" rows="3" placeholder="Descrição detalhada do produto" required></textarea></div>
+                <div class="form-row half"><label>FORNECEDOR</label><input type="text" id="produtoFornecedor" placeholder="Nome do fornecedor" required></div>
+                <div class="form-row half"><label>FABRICANTE</label><input type="text" id="produtoFabricante" placeholder="Fabricante" required></div>
+                <div class="form-row half"><label>LOTE</label><input type="text" id="produtoLote" placeholder="Número do lote" required></div>
+                <div class="form-row half"><label>GRUPO</label><input type="text" id="produtoGrupo" placeholder="Grupo do produto" required></div>
+                <div class="form-row half"><label>SUB-GRUPO</label><input type="text" id="produtoSubgrupo" placeholder="Subgrupo" required></div>
+                <div class="form-row half"><label>UNIDADE</label><input type="text" id="produtoUnidade" placeholder="Unidade de medida" required></div>
+                <div class="form-row half"><label>PESO</label><input type="text" id="produtoPeso" placeholder="Peso em Kg" required></div>
+                <div class="form-actions">
+                    <button type="submit" class="action-button save">SALVAR</button>
+                    <button type="button" class="action-button cancel" onclick="closeModal('produtoModal')">CANCELAR</button>
+                    <button type="button" class="action-button delete" onclick="excluirProduto()" style="display:none;">EXCLUIR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cooperativa -->
+    <div id="cooperativaModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('cooperativaModal')">&times;</span>
+            <h2>Cadastro de Cooperativa</h2>
+            <form id="formCooperativa" class="cadastro-form">
+                <input type="hidden" id="cooperativaId">
+                <div class="form-row half"><label>CNPJ</label><input type="text" id="cooperativaCnpj" placeholder="00.000.000/0001-00" required></div>
+                <div class="form-row half"><label>RAZÃO SOCIAL</label><input type="text" id="cooperativaRazaoSocial" placeholder="Nome da cooperativa" required></div>
+                <div class="form-row full"><label>ENDEREÇO (RUA)</label><input type="text" id="cooperativaEndereco" placeholder="Rua Exemplo, 123" required></div>
+                <div class="form-row quarter"><label>NÚMERO</label><input type="text" id="cooperativaNumero" placeholder="123" required></div>
+                <div class="form-row quarter"><label>BAIRRO</label><input type="text" id="cooperativaBairro" placeholder="Centro" required></div>
+                <div class="form-row quarter"><label>CIDADE</label><input type="text" id="cooperativaCidade" placeholder="Cidade Exemplo" required></div>
+                <div class="form-row quarter"><label>ESTADO</label><input type="text" id="cooperativaEstado" placeholder="UF" required></div>
+                <div class="form-row quarter"><label>CEP</label><input type="text" id="cooperativaCep" placeholder="00000-000" required></div>
+                <div class="form-row half"><label>TELEFONE</label><input type="text" id="cooperativaTelefone" placeholder="(00) 0000-0000" required></div>
+                <div class="form-row quarter"><label>E-MAIL</label><input type="email" id="cooperativaEmail" placeholder="email@exemplo.com" required></div>
+                <div class="form-actions">
+                    <button type="submit" class="action-button save">SALVAR</button>
+                    <button type="button" class="action-button cancel" onclick="closeModal('cooperativaModal')">CANCELAR</button>
+                    <button type="button" class="action-button delete" onclick="excluirCooperativa()" style="display:none;">EXCLUIR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Colaborador -->
+    <div id="colaboradorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('colaboradorModal')">&times;</span>
+            <h2>Cadastro de Colaborador</h2>
+            <form id="formColaborador" class="cadastro-form">
+                <input type="hidden" id="colaboradorId">
+                <div class="form-row half"><label>CPF</label><input type="text" id="colaboradorCpf" placeholder="000.000.000-00" required></div>
+                <div class="form-row half"><label>NOME COMPLETO</label><input type="text" id="colaboradorNome" placeholder="Nome do colaborador" required></div>
+                <div class="form-row half"><label>FUNÇÃO/CARGO</label><input type="text" id="colaboradorFuncao" placeholder="Cargo ou função" required></div>
+                <div class="form-row half"><label>ENDEREÇO (RUA)</label><input type="text" id="colaboradorEndereco" placeholder="Rua Exemplo, 123" required></div>
+                <div class="form-row half"><label>NUMERO</label><input type="text" id="colaboradorNumero" placeholder="123" required></div>
+                <div class="form-row half"><label>BAIRRO</label><input type="text" id="colaboradorBairro" placeholder="Centro" required></div>
+                <div class="form-row half"><label>CIDADE</label><input type="text" id="colaboradorCidade" placeholder="Cidade" required></div>
+                <div class="form-row half"><label>ESTADO</label><input type="text" id="colaboradorEstado" placeholder="UF" required></div>
+                <div class="form-row half"><label>CEP</label><input type="text" id="colaboradorCep" placeholder="00000-000" required></div>
+                <div class="form-row half"><label>TELEFONE</label><input type="text" id="colaboradorTelefone" placeholder="(00) 0000-0000" required></div>
+                <div class="form-row half"><label>VENDEDOR</label><input type="text" id="colaboradorVendedor" placeholder="Nome do vendedor" required></div>
+                <div class="form-row half"><label>E-MAIL</label><input type="email" id="colaboradorEmail" placeholder="email@exemplo.com" required></div>
+                <div class="form-actions">
+                    <button type="submit" class="action-button save">SALVAR</button>
+                    <button type="button" class="action-button cancel" onclick="closeModal('colaboradorModal')">CANCELAR</button>
+                    <button type="button" class="action-button delete" onclick="excluirColaborador()" style="display:none;">EXCLUIR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Logout -->
+    <div id="logout-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-door-open"></i> Confirmar Saída</h3>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja sair do sistema?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-logout" class="secondary-btn">Cancelar</button>
+                <button id="confirm-logout" class="login-btn">Sim, Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== FUNÇÕES DO USUÁRIO ==========
+        function mostrarNomeUsuario() {
+            // Tenta pegar o nome do usuário
+            const usuarioNome = localStorage.getItem('usuario_nome') || 
+                               localStorage.getItem('nome') || 
+                               localStorage.getItem('usuario') || 
+                               'Usuário';
+            
+            // Mostra o nome no topo
+            const userDisplayName = document.getElementById('userDisplayName');
+            userDisplayName.textContent = usuarioNome;
+        }
+
+        function logout() {
+            const logoutModal = document.getElementById('logout-modal');
+            logoutModal.style.display = 'flex';
+        }
+
+        // ========== SISTEMA DE CRUD COM LOCALSTORAGE ==========
+        // (Todo o código existente de CRUD aqui)
+
+        // Inicializar dados no localStorage
+        function inicializarDados() {
+            if (!localStorage.getItem('fornecedores')) {
+                localStorage.setItem('fornecedores', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('produtos')) {
+                localStorage.setItem('produtos', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('cooperativas')) {
+                localStorage.setItem('cooperativas', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('colaboradores')) {
+                localStorage.setItem('colaboradores', JSON.stringify([]));
+            }
+        }
+
+        // Variáveis para controle
+        let abaAtual = 'fornecedores';
+        let termoPesquisa = '';
+
+        // Funções para navegação entre abas
+        function mostrarAba(aba) {
+            // Esconder todas as abas
+            document.querySelectorAll('.aba-conteudo').forEach(div => {
+                div.style.display = 'none';
+            });
+            
+            // Mostrar aba selecionada
+            document.getElementById(`aba-${aba}`).style.display = 'block';
+            abaAtual = aba;
+            
+            // Recarregar dados da aba atual
+            switch(aba) {
+                case 'fornecedores':
+                    carregarFornecedores();
+                    break;
+                case 'produtos':
+                    carregarProdutos();
+                    break;
+                case 'cooperativas':
+                    carregarCooperativas();
+                    break;
+                case 'colaboradores':
+                    carregarColaboradores();
+                    break;
+            }
+        }
+
+        // Função de pesquisa
+        function filtrarRegistros() {
+            termoPesquisa = document.getElementById('input-pesquisa').value.toLowerCase();
+            mostrarAba(abaAtual);
+        }
+
+        function limparFiltro() {
+            document.getElementById('input-pesquisa').value = '';
+            termoPesquisa = '';
+            mostrarAba(abaAtual);
+        }
+
+        // Funções para Fornecedor
+        function salvarFornecedor(event) {
+            event.preventDefault();
+            
+            const fornecedor = {
+                id: document.getElementById('fornecedorId').value || Date.now().toString(),
+                cnpj: document.getElementById('fornecedorCnpj').value,
+                razaoSocial: document.getElementById('fornecedorRazaoSocial').value,
+                endereco: document.getElementById('fornecedorEndereco').value,
+                numero: document.getElementById('fornecedorNumero').value,
+                bairro: document.getElementById('fornecedorBairro').value,
+                cidade: document.getElementById('fornecedorCidade').value,
+                estado: document.getElementById('fornecedorEstado').value,
+                cep: document.getElementById('fornecedorCep').value,
+                telefone: document.getElementById('fornecedorTelefone').value,
+                vendedor: document.getElementById('fornecedorVendedor').value,
+                email: document.getElementById('fornecedorEmail').value
+            };
+
+            const fornecedores = JSON.parse(localStorage.getItem('fornecedores'));
+            
+            if (document.getElementById('fornecedorId').value) {
+                const index = fornecedores.findIndex(f => f.id === fornecedor.id);
+                fornecedores[index] = fornecedor;
+            } else {
+                fornecedores.push(fornecedor);
+            }
+            
+            localStorage.setItem('fornecedores', JSON.stringify(fornecedores));
+            closeModal('fornecedorModal');
+            carregarFornecedores();
+        }
+
+        function editarFornecedor(id) {
+            const fornecedores = JSON.parse(localStorage.getItem('fornecedores'));
+            const fornecedor = fornecedores.find(f => f.id === id);
+            
+            document.getElementById('fornecedorId').value = fornecedor.id;
+            document.getElementById('fornecedorCnpj').value = fornecedor.cnpj;
+            document.getElementById('fornecedorRazaoSocial').value = fornecedor.razaoSocial;
+            document.getElementById('fornecedorEndereco').value = fornecedor.endereco;
+            document.getElementById('fornecedorNumero').value = fornecedor.numero;
+            document.getElementById('fornecedorBairro').value = fornecedor.bairro;
+            document.getElementById('fornecedorCidade').value = fornecedor.cidade;
+            document.getElementById('fornecedorEstado').value = fornecedor.estado;
+            document.getElementById('fornecedorCep').value = fornecedor.cep;
+            document.getElementById('fornecedorTelefone').value = fornecedor.telefone;
+            document.getElementById('fornecedorVendedor').value = fornecedor.vendedor;
+            document.getElementById('fornecedorEmail').value = fornecedor.email;
+            
+            document.querySelector('#fornecedorModal .delete').style.display = 'block';
+            openModal('fornecedorModal');
+        }
+
+        function excluirFornecedor() {
+            const id = document.getElementById('fornecedorId').value;
+            const fornecedores = JSON.parse(localStorage.getItem('fornecedores'));
+            const novaLista = fornecedores.filter(f => f.id !== id);
+            
+            localStorage.setItem('fornecedores', JSON.stringify(novaLista));
+            closeModal('fornecedorModal');
+            carregarFornecedores();
+        }
+
+        function carregarFornecedores() {
+            const fornecedores = JSON.parse(localStorage.getItem('fornecedores'));
+            const lista = document.getElementById('fornecedores-lista');
+            
+            let fornecedoresFiltrados = fornecedores;
+            if (termoPesquisa) {
+                fornecedoresFiltrados = fornecedores.filter(fornecedor => 
+                    fornecedor.razaoSocial.toLowerCase().includes(termoPesquisa) ||
+                    fornecedor.cnpj.includes(termoPesquisa) ||
+                    fornecedor.cidade.toLowerCase().includes(termoPesquisa)
+                );
+            }
+            
+            lista.innerHTML = '';
+            if (fornecedoresFiltrados.length === 0) {
+                lista.innerHTML = '<p>Nenhum fornecedor encontrado</p>';
+                return;
+            }
+            
+            fornecedoresFiltrados.forEach(fornecedor => {
+                lista.innerHTML += `
+                    <div style="border:1px solid #ccc; padding:10px; margin:5px 0;">
+                        <strong>${fornecedor.razaoSocial}</strong> - CNPJ: ${fornecedor.cnpj}<br>
+                        ${fornecedor.endereco}, ${fornecedor.numero} - ${fornecedor.cidade}/${fornecedor.estado}<br>
+                        Tel: ${fornecedor.telefone} - Email: ${fornecedor.email}
+                        <button onclick="editarFornecedor('${fornecedor.id}')" style="margin-left: 10px;">Editar</button>
+                    </div>
+                `;
+            });
+        }
+
+        // Funções para Produto
+        function salvarProduto(event) {
+            event.preventDefault();
+            
+            const produto = {
+                id: document.getElementById('produtoId').value || Date.now().toString(),
+                codigo: document.getElementById('produtoCodigo').value,
+                item: document.getElementById('produtoItem').value,
+                descricao: document.getElementById('produtoDescricao').value,
+                fornecedor: document.getElementById('produtoFornecedor').value,
+                fabricante: document.getElementById('produtoFabricante').value,
+                lote: document.getElementById('produtoLote').value,
+                grupo: document.getElementById('produtoGrupo').value,
+                subgrupo: document.getElementById('produtoSubgrupo').value,
+                unidade: document.getElementById('produtoUnidade').value,
+                peso: document.getElementById('produtoPeso').value
+            };
+
+            const produtos = JSON.parse(localStorage.getItem('produtos'));
+            
+            if (document.getElementById('produtoId').value) {
+                const index = produtos.findIndex(p => p.id === produto.id);
+                produtos[index] = produto;
+            } else {
+                produtos.push(produto);
+            }
+            
+            localStorage.setItem('produtos', JSON.stringify(produtos));
+            closeModal('produtoModal');
+            carregarProdutos();
+        }
+
+        function editarProduto(id) {
+            const produtos = JSON.parse(localStorage.getItem('produtos'));
+            const produto = produtos.find(p => p.id === id);
+            
+            document.getElementById('produtoId').value = produto.id;
+            document.getElementById('produtoCodigo').value = produto.codigo;
+            document.getElementById('produtoItem').value = produto.item;
+            document.getElementById('produtoDescricao').value = produto.descricao;
+            document.getElementById('produtoFornecedor').value = produto.fornecedor;
+            document.getElementById('produtoFabricante').value = produto.fabricante;
+            document.getElementById('produtoLote').value = produto.lote;
+            document.getElementById('produtoGrupo').value = produto.grupo;
+            document.getElementById('produtoSubgrupo').value = produto.subgrupo;
+            document.getElementById('produtoUnidade').value = produto.unidade;
+            document.getElementById('produtoPeso').value = produto.peso;
+            
+            document.querySelector('#produtoModal .delete').style.display = 'block';
+            openModal('produtoModal');
+        }
+
+        function excluirProduto() {
+            const id = document.getElementById('produtoId').value;
+            const produtos = JSON.parse(localStorage.getItem('produtos'));
+            const novaLista = produtos.filter(p => p.id !== id);
+            
+            localStorage.setItem('produtos', JSON.stringify(novaLista));
+            closeModal('produtoModal');
+            carregarProdutos();
+        }
+
+        function carregarProdutos() {
+            const produtos = JSON.parse(localStorage.getItem('produtos'));
+            const lista = document.getElementById('produtos-lista');
+            
+            let produtosFiltrados = produtos;
+            if (termoPesquisa) {
+                produtosFiltrados = produtos.filter(produto => 
+                    produto.item.toLowerCase().includes(termoPesquisa) ||
+                    produto.codigo.includes(termoPesquisa) ||
+                    produto.descricao.toLowerCase().includes(termoPesquisa)
+                );
+            }
+            
+            lista.innerHTML = '';
+            if (produtosFiltrados.length === 0) {
+                lista.innerHTML = '<p>Nenhum produto encontrado</p>';
+                return;
+            }
+            
+            produtosFiltrados.forEach(produto => {
+                lista.innerHTML += `
+                    <div style="border:1px solid #ccc; padding:10px; margin:5px 0;">
+                        <strong>${produto.item}</strong> - Código: ${produto.codigo}<br>
+                        Descrição: ${produto.descricao}<br>
+                        Fornecedor: ${produto.fornecedor} - Lote: ${produto.lote}
+                        <button onclick="editarProduto('${produto.id}')" style="margin-left: 10px;">Editar</button>
+                    </div>
+                `;
+            });
+        }
+
+        // Funções para Cooperativa
+        function salvarCooperativa(event) {
+            event.preventDefault();
+            
+            const cooperativa = {
+                id: document.getElementById('cooperativaId').value || Date.now().toString(),
+                cnpj: document.getElementById('cooperativaCnpj').value,
+                razaoSocial: document.getElementById('cooperativaRazaoSocial').value,
+                endereco: document.getElementById('cooperativaEndereco').value,
+                numero: document.getElementById('cooperativaNumero').value,
+                bairro: document.getElementById('cooperativaBairro').value,
+                cidade: document.getElementById('cooperativaCidade').value,
+                estado: document.getElementById('cooperativaEstado').value,
+                cep: document.getElementById('cooperativaCep').value,
+                telefone: document.getElementById('cooperativaTelefone').value,
+                email: document.getElementById('cooperativaEmail').value
+            };
+
+            const cooperativas = JSON.parse(localStorage.getItem('cooperativas'));
+            
+            if (document.getElementById('cooperativaId').value) {
+                const index = cooperativas.findIndex(c => c.id === cooperativa.id);
+                cooperativas[index] = cooperativa;
+            } else {
+                cooperativas.push(cooperativa);
+            }
+            
+            localStorage.setItem('cooperativas', JSON.stringify(cooperativas));
+            closeModal('cooperativaModal');
+            carregarCooperativas();
+        }
+
+        function editarCooperativa(id) {
+            const cooperativas = JSON.parse(localStorage.getItem('cooperativas'));
+            const cooperativa = cooperativas.find(c => c.id === id);
+            
+            document.getElementById('cooperativaId').value = cooperativa.id;
+            document.getElementById('cooperativaCnpj').value = cooperativa.cnpj;
+            document.getElementById('cooperativaRazaoSocial').value = cooperativa.razaoSocial;
+            document.getElementById('cooperativaEndereco').value = cooperativa.endereco;
+            document.getElementById('cooperativaNumero').value = cooperativa.numero;
+            document.getElementById('cooperativaBairro').value = cooperativa.bairro;
+            document.getElementById('cooperativaCidade').value = cooperativa.cidade;
+            document.getElementById('cooperativaEstado').value = cooperativa.estado;
+            document.getElementById('cooperativaCep').value = cooperativa.cep;
+            document.getElementById('cooperativaTelefone').value = cooperativa.telefone;
+            document.getElementById('cooperativaEmail').value = cooperativa.email;
+            
+            document.querySelector('#cooperativaModal .delete').style.display = 'block';
+            openModal('cooperativaModal');
+        }
+
+        function excluirCooperativa() {
+            const id = document.getElementById('cooperativaId').value;
+            const cooperativas = JSON.parse(localStorage.getItem('cooperativas'));
+            const novaLista = cooperativas.filter(c => c.id !== id);
+            
+            localStorage.setItem('cooperativas', JSON.stringify(novaLista));
+            closeModal('cooperativaModal');
+            carregarCooperativas();
+        }
+
+        function carregarCooperativas() {
+            const cooperativas = JSON.parse(localStorage.getItem('cooperativas'));
+            const lista = document.getElementById('cooperativas-lista');
+            
+            let cooperativasFiltradas = cooperativas;
+            if (termoPesquisa) {
+                cooperativasFiltradas = cooperativas.filter(cooperativa => 
+                    cooperativa.razaoSocial.toLowerCase().includes(termoPesquisa) ||
+                    cooperativa.cnpj.includes(termoPesquisa) ||
+                    cooperativa.cidade.toLowerCase().includes(termoPesquisa)
+                );
+            }
+            
+            lista.innerHTML = '';
+            if (cooperativasFiltradas.length === 0) {
+                lista.innerHTML = '<p>Nenhuma cooperativa encontrada</p>';
+                return;
+            }
+            
+            cooperativasFiltradas.forEach(cooperativa => {
+                lista.innerHTML += `
+                    <div style="border:1px solid #ccc; padding:10px; margin:5px 0;">
+                        <strong>${cooperativa.razaoSocial}</strong> - CNPJ: ${cooperativa.cnpj}<br>
+                        ${cooperativa.endereco}, ${cooperativa.numero} - ${cooperativa.cidade}/${cooperativa.estado}<br>
+                        Tel: ${cooperativa.telefone} - Email: ${cooperativa.email}
+                        <button onclick="editarCooperativa('${cooperativa.id}')" style="margin-left: 10px;">Editar</button>
+                    </div>
+                `;
+            });
+        }
+
+        // Funções para Colaborador
+        function salvarColaborador(event) {
+            event.preventDefault();
+            
+            const colaborador = {
+                id: document.getElementById('colaboradorId').value || Date.now().toString(),
+                cpf: document.getElementById('colaboradorCpf').value,
+                nome: document.getElementById('colaboradorNome').value,
+                funcao: document.getElementById('colaboradorFuncao').value,
+                endereco: document.getElementById('colaboradorEndereco').value,
+                numero: document.getElementById('colaboradorNumero').value,
+                bairro: document.getElementById('colaboradorBairro').value,
+                cidade: document.getElementById('colaboradorCidade').value,
+                estado: document.getElementById('colaboradorEstado').value,
+                cep: document.getElementById('colaboradorCep').value,
+                telefone: document.getElementById('colaboradorTelefone').value,
+                vendedor: document.getElementById('colaboradorVendedor').value,
+                email: document.getElementById('colaboradorEmail').value
+            };
+
+            const colaboradores = JSON.parse(localStorage.getItem('colaboradores'));
+            
+            if (document.getElementById('colaboradorId').value) {
+                const index = colaboradores.findIndex(c => c.id === colaborador.id);
+                colaboradores[index] = colaborador;
+            } else {
+                colaboradores.push(colaborador);
+            }
+            
+            localStorage.setItem('colaboradores', JSON.stringify(colaboradores));
+            closeModal('colaboradorModal');
+            carregarColaboradores();
+        }
+
+        function editarColaborador(id) {
+            const colaboradores = JSON.parse(localStorage.getItem('colaboradores'));
+            const colaborador = colaboradores.find(c => c.id === id);
+            
+            document.getElementById('colaboradorId').value = colaborador.id;
+            document.getElementById('colaboradorCpf').value = colaborador.cpf;
+            document.getElementById('colaboradorNome').value = colaborador.nome;
+            document.getElementById('colaboradorFuncao').value = colaborador.funcao;
+            document.getElementById('colaboradorEndereco').value = colaborador.endereco;
+            document.getElementById('colaboradorNumero').value = colaborador.numero;
+            document.getElementById('colaboradorBairro').value = colaborador.bairro;
+            document.getElementById('colaboradorCidade').value = colaborador.cidade;
+            document.getElementById('colaboradorEstado').value = colaborador.estado;
+            document.getElementById('colaboradorCep').value = colaborador.cep;
+            document.getElementById('colaboradorTelefone').value = colaborador.telefone;
+            document.getElementById('colaboradorVendedor').value = colaborador.vendedor;
+            document.getElementById('colaboradorEmail').value = colaborador.email;
+            
+            document.querySelector('#colaboradorModal .delete').style.display = 'block';
+            openModal('colaboradorModal');
+        }
+
+        function excluirColaborador() {
+            const id = document.getElementById('colaboradorId').value;
+            const colaboradores = JSON.parse(localStorage.getItem('colaboradores'));
+            const novaLista = colaboradores.filter(c => c.id !== id);
+            
+            localStorage.setItem('colaboradores', JSON.stringify(novaLista));
+            closeModal('colaboradorModal');
+            carregarColaboradores();
+        }
+
+        function carregarColaboradores() {
+            const colaboradores = JSON.parse(localStorage.getItem('colaboradores'));
+            const lista = document.getElementById('colaboradores-lista');
+            
+            let colaboradoresFiltrados = colaboradores;
+            if (termoPesquisa) {
+                colaboradoresFiltrados = colaboradores.filter(colaborador => 
+                    colaborador.nome.toLowerCase().includes(termoPesquisa) ||
+                    colaborador.cpf.includes(termoPesquisa) ||
+                    colaborador.funcao.toLowerCase().includes(termoPesquisa)
+                );
+            }
+            
+            lista.innerHTML = '';
+            if (colaboradoresFiltrados.length === 0) {
+                lista.innerHTML = '<p>Nenhum colaborador encontrado</p>';
+                return;
+            }
+            
+            colaboradoresFiltrados.forEach(colaborador => {
+                lista.innerHTML += `
+                    <div style="border:1px solid #ccc; padding:10px; margin:5px 0;">
+                        <strong>${colaborador.nome}</strong> - CPF: ${colaborador.cpf}<br>
+                        Função: ${colaborador.funcao}<br>
+                        ${colaborador.endereco}, ${colaborador.numero} - ${colaborador.cidade}/${colaborador.estado}<br>
+                        Tel: ${colaborador.telefone} - Email: ${colaborador.email}
+                        <button onclick="editarColaborador('${colaborador.id}')" style="margin-left: 10px;">Editar</button>
+                    </div>
+                `;
+            });
+        }
+
+        // Funções gerais
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            if (!document.querySelector(`#${modalId} input[type="hidden"]`).value) {
+                document.querySelector(`#${modalId} form`).reset();
+                document.querySelector(`#${modalId} .delete`).style.display = 'none';
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mostra nome do usuário
+            mostrarNomeUsuario();
+            
+            // Inicializa dados do CRUD
+            inicializarDados();
+            
+            // Event Listeners para formulários
+            document.getElementById('formFornecedor').addEventListener('submit', salvarFornecedor);
+            document.getElementById('formProduto').addEventListener('submit', salvarProduto);
+            document.getElementById('formCooperativa').addEventListener('submit', salvarCooperativa);
+            document.getElementById('formColaborador').addEventListener('submit', salvarColaborador);
+            
+            // Carregar aba inicial
+            mostrarAba('fornecedores');
+            
+            // Modal de logout
+            const logoutModal = document.getElementById('logout-modal');
+            const confirmLogout = document.getElementById('confirm-logout');
+            const cancelLogout = document.getElementById('cancel-logout');
+
+            confirmLogout.addEventListener("click", () => {
+                // Limpa todos os dados
+                localStorage.removeItem('usuario_logado');
+                localStorage.removeItem('usuario_id');
+                localStorage.removeItem('usuario_nome');
+                localStorage.removeItem('usuario_email');
+                localStorage.removeItem('usuario_username');
+                localStorage.removeItem('token');
+                
+                // Redireciona para login
+                window.location.href = "login.html";
+            });
+
+            cancelLogout.addEventListener("click", () => {
+                logoutModal.style.display = 'none';
+            });
+
+            // Fecha modal ao clicar fora
+            window.addEventListener('click', (e) => {
+                if (e.target === logoutModal) {
+                    logoutModal.style.display = 'none';
+                }
+            });
+            
+            // Sidebar dropdown
+            const cadastroMenu = document.getElementById('cadastro-menu');
+            const dropdownSidebar = document.getElementById('dropdown-cadastro');
+
+            cadastroMenu.addEventListener('click', () => {
+                dropdownSidebar.style.display = dropdownSidebar.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Fechar modais ao clicar fora
+            window.onclick = function(event) {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if(event.target === modal) modal.style.display = 'none';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

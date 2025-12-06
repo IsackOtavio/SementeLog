@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Cadastro</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+  <div class="login-bg">
+    <div class="login-card">
+
+      <!-- Ícone do usuário -->
+      <div class="login-icon">
+        <i class="fa-solid fa-user"></i>
+      </div>
+
+      <h2 class="login-title">Acesso ao Sistema</h2>
+
+      <!-- Formulário de login -->
+      <form id="loginForm">
+
+        <label for="username">Usuário</label>
+        <input type="text" id="username" name="usuario" required />
+
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="senha" required />
+
+        <div class="links">
+          <a href="#" id="forgotPassword">Esqueceu a senha?</a><br>
+          <a href="Transparencia.html">Informações Públicas</a>
+        </div>
+
+        <button type="submit" class="login-btn" id="loginButton">Login</button>
+        
+        <button type="button" class="secondary-btn" onclick="showRegister()">
+          Criar Nova Conta
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Modal de Cadastro -->
+  <div id="registerModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:1000;">
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:30px; border-radius:10px; max-width:400px; width:90%;">
+      <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="margin:0;"><i class="fas fa-user-plus"></i> Criar Nova Conta</h2>
+        <button class="close-btn" onclick="closeRegister()" style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+      </div>
+      
+      <form id="registerForm">
+        <div class="form-group" style="margin-bottom:15px;">
+          <label for="regName" style="display:block; margin-bottom:5px;">Nome Completo *</label>
+          <input type="text" id="regName" name="nome" required style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+        </div>
+        
+        <div class="form-group" style="margin-bottom:15px;">
+          <label for="regEmail" style="display:block; margin-bottom:5px;">E-mail *</label>
+          <input type="email" id="regEmail" name="email" required style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+        </div>
+        
+        <div class="form-group" style="margin-bottom:15px;">
+          <label for="regUsername" style="display:block; margin-bottom:5px;">Nome de Usuário *</label>
+          <input type="text" id="regUsername" name="usuario" required style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+        </div>
+        
+        <div class="form-group" style="margin-bottom:15px;">
+          <label for="regPassword" style="display:block; margin-bottom:5px;">Senha *</label>
+          <input type="password" id="regPassword" name="senha" required style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+        </div>
+        
+        <div class="form-group" style="margin-bottom:20px;">
+          <label for="regConfirmPassword" style="display:block; margin-bottom:5px;">Confirmar Senha *</label>
+          <input type="password" id="regConfirmPassword" name="confirmar_senha" required style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+        </div>
+        
+        <div id="registerMessage" style="display:none; padding:10px; margin-bottom:15px; border-radius:4px;"></div>
+        
+        <button type="submit" class="login-btn" style="width:100%; padding:10px; background:#007bff; color:white; border:none; border-radius:4px; cursor:pointer;">Criar Conta</button>
+      </form>
+    </div>
+  </div>
+
+<script>
+let modalAberto = false;
+
+// ========== FUNÇÕES DO MODAL ==========
+function showRegister() {
+  if (modalAberto) return;
+  modalAberto = true;
+  document.getElementById('registerModal').style.display = 'block';
+  document.getElementById('registerMessage').style.display = 'none';
+  document.getElementById('registerForm').reset();
+
+  setTimeout(() => {
+    document.getElementById('regName').focus();
+  }, 100);
+}
+
+function closeRegister() {
+  modalAberto = false;
+  document.getElementById('registerModal').style.display = 'none';
+}
+
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('registerModal');
+  if (event.target === modal && modalAberto) {
+    closeRegister();
+  }
+});
+
+// ========== CADASTRO ==========
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const messageDiv = document.getElementById('registerMessage');
+  messageDiv.style.display = 'none';
+
+  const nome = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const usuario = document.getElementById('regUsername').value.trim();
+  const senha = document.getElementById('regPassword').value;
+  const confirmarSenha = document.getElementById('regConfirmPassword').value;
+
+  if (!nome || !email || !usuario || !senha || !confirmarSenha) {
+    mostrarMensagem('Por favor, preencha todos os campos.', 'erro');
+    return;
+  }
+
+  if (senha !== confirmarSenha) {
+    mostrarMensagem('As senhas não coincidem.', 'erro');
+    return;
+  }
+
+  if (senha.length < 6) {
+    mostrarMensagem('A senha deve ter pelo menos 6 caracteres.', 'erro');
+    return;
+  }
+
+  try {
+    const res = await fetch("http://127.0.0.1:5000/cadastrar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, email, usuario, senha })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      mostrarMensagem('Conta criada com sucesso! Agora faça login.', 'sucesso');
+
+      setTimeout(() => {
+        closeRegister();
+        document.getElementById('username').value = usuario;
+        document.getElementById('password').value = '';
+        document.getElementById('username').focus();
+      }, 2000);
+
+    } else {
+      mostrarMensagem(data.error || 'Erro ao criar conta.', 'erro');
+    }
+
+  } catch (err) {
+    mostrarMensagem('Erro ao conectar com o servidor.', 'erro');
+  }
+});
+
+function mostrarMensagem(texto, tipo) {
+  const messageDiv = document.getElementById('registerMessage');
+  messageDiv.textContent = texto;
+  messageDiv.style.display = 'block';
+  messageDiv.style.backgroundColor = tipo === 'sucesso' ? '#d4edda' : '#f8d7da';
+  messageDiv.style.color = tipo === 'sucesso' ? '#155724' : '#721c24';
+  messageDiv.style.border = tipo === 'sucesso' ? '1px solid #c3e6cb' : '1px solid #f5c6cb';
+}
+
+// ========== LOGIN (AGORA COM LOGIN LIVRE) ==========
+document.addEventListener("DOMContentLoaded", function() {
+
+  const form = document.getElementById("loginForm");
+  const loginButton = document.getElementById("loginButton");
+
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const usuario = document.getElementById("username").value.trim();
+    const senha = document.getElementById("password").value.trim();
+
+    // ========== LOGIN LIBERADO =============
+    const DEV_MODE = true;
+
+    if (DEV_MODE) {
+      console.log("DEV MODE ATIVO — Login sem senha!");
+
+      localStorage.clear();
+      localStorage.setItem('usuario_logado', 'true');
+      localStorage.setItem('usuario', usuario);
+      localStorage.setItem('nome', usuario);
+
+      setTimeout(() => {
+        window.location.href = "BEM-VINDO.html";
+      }, 500);
+
+      return;
+    }
+
+    // (se DEV_MODE = false, volta a usar o backend normalmente)
+  });
+
+  document.getElementById('forgotPassword').addEventListener('click', function(e) {
+    e.preventDefault();
+    const email = prompt("Digite seu e-mail cadastrado para recuperar a senha:");
+    if (email) alert("Um link de recuperação foi enviado para: " + email);
+  });
+});
+</script>
+
+</body>
+</html>

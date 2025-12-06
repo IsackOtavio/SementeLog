@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema SementeLog - Compras</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon" aria-hidden="true"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            
+            <nav class="menu" aria-label="Menu principal">
+                <a href="compras.html" class="menu-item active"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="estoque.html" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="logistica.html" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="relatorios.html" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="qrcode.html" class="menu-item"><i class="fa-solid fa-qrcode"></i> QR Code</a>
+                <a href="auditoria.html" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+                <a href="cadastro.html" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <!-- BARRA SUPERIOR COM NOME DO USUÁRIO E BOTÃO SAIR -->
+            <div class="top-bar">
+                <div class="user-controls">
+                    <span class="user-info-text">
+                        <i class="fa-solid fa-user"></i>
+                        <span id="userDisplayName">Usuário</span>
+                    </span>
+                    <button class="logout-btn" onclick="mostrarModalLogout()">
+                        <i class="fa-solid fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <section class="compras-card">
+                <header class="cadastro-header">
+                    <h1><i class="fa-solid fa-cart-shopping"></i> Compras</h1>
+                    <p class="page-subtitle">Controle de pedidos e aquisições</p>
+                </header>
+
+                <div class="actions-bar">
+                    <a href="pedido_compra.html" class="action-button add">
+                        <i class="fa-solid fa-plus-circle"></i> Novo Pedido
+                    </a>
+                </div>
+                
+                <div class="search-bar">
+                    <i class="fa-solid fa-search" aria-hidden="true"></i>
+                    <input type="text" id="filter-input" placeholder="Filtrar pedidos por descrição..." 
+                           aria-label="Filtrar Pedidos" onkeyup="filtrarPedidos()">
+                    <button onclick="limparFiltro()" class="search-clear-btn">
+                        <i class="fa-solid fa-times"></i> Limpar
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-info">
+                        <span id="total-pedidos">Carregando pedidos...</span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><i class="fa-solid fa-calendar"></i> Data Compra</th>
+                                <th><i class="fa-solid fa-file-alt"></i> Descrição</th>
+                                <th><i class="fa-solid fa-box"></i> Quantidade</th>
+                                <th><i class="fa-solid fa-money-bill-wave"></i> Valor Unitário</th>
+                                <th><i class="fa-solid fa-calculator"></i> Valor Total</th>
+                                <th><i class="fa-solid fa-cogs"></i> Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-pedidos">
+                            <!-- JS irá preencher -->
+                        </tbody>
+                    </table>
+                    <div class="table-empty" id="empty-message" style="display: none;">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <p>Nenhum pedido encontrado</p>
+                    </div>
+                </div>
+                
+                <!-- Informações do usuário responsável -->
+                <div class="user-responsavel">
+                    <p><i class="fa-solid fa-user-check"></i> 
+                       <strong>Responsável:</strong> 
+                       <span id="userResponsavel"></span>
+                    </p>
+                    <p><i class="fa-solid fa-calendar-alt"></i> 
+                       <strong>Última atualização:</strong> 
+                       <span id="lastUpdate"></span>
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal de Logout - IDÊNTICO AO DA PÁGINA DE ESTOQUE -->
+    <div id="logout-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-door-open"></i> Confirmar Saída</h3>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja sair do sistema?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-logout" class="secondary-btn">Cancelar</button>
+                <button id="confirm-logout" class="login-btn">Sim, Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== CONFIGURAÇÕES DO BANCO DE DADOS ==========
+        const API_URL = 'http://localhost:3000/api';
+        let todosPedidos = [];
+        let termoFiltro = '';
+
+        // ========== FUNÇÕES AUXILIARES ==========
+        function formatarNumero(valor) {
+            if (valor === null || valor === undefined) return 0;
+            
+            if (typeof valor === 'string') {
+                valor = valor.replace('R$', '').trim();
+                
+                if (valor.includes(',') && valor.includes('.')) {
+                    valor = valor.replace(/\./g, '').replace(',', '.');
+                } else if (valor.includes(',') && !valor.includes('.')) {
+                    valor = valor.replace(',', '.');
+                }
+            }
+            
+            const numero = parseFloat(valor);
+            return isNaN(numero) ? 0 : numero;
+        }
+
+        function formatarMoeda(valor) {
+            const numero = formatarNumero(valor);
+            return numero.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function calcularValorTotal(quantidade, valorUnitario) {
+            const qtd = formatarNumero(quantidade);
+            const vUnit = formatarNumero(valorUnitario);
+            return qtd * vUnit;
+        }
+
+        function formatarData(data) {
+            if (!data) return new Date().toLocaleDateString('pt-BR');
+            
+            if (typeof data === 'string') {
+                const isoRegex = /^(\d{4})-(\d{2})-(\d{2})/;
+                const match = data.match(isoRegex);
+                if (match) {
+                    const [_, ano, mes, dia] = match;
+                    return `${dia}/${mes}/${ano}`;
+                }
+                
+                const brRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+                if (brRegex.test(data)) {
+                    return data;
+                }
+                
+                const dataObj = new Date(data);
+                if (!isNaN(dataObj.getTime())) {
+                    return dataObj.toLocaleDateString('pt-BR');
+                }
+            }
+            
+            if (data instanceof Date) {
+                return data.toLocaleDateString('pt-BR');
+            }
+            
+            return new Date().toLocaleDateString('pt-BR');
+        }
+
+        // ========== FUNÇÕES DO USUÁRIO ==========
+        function mostrarNomeUsuario() {
+            const usuarioNome = localStorage.getItem('usuario_nome') || 
+                               localStorage.getItem('nome') || 
+                               localStorage.getItem('usuario') || 
+                               'Usuário';
+            
+            const userDisplayName = document.getElementById('userDisplayName');
+            const userResponsavel = document.getElementById('userResponsavel');
+            
+            userDisplayName.textContent = usuarioNome;
+            userResponsavel.textContent = usuarioNome;
+            
+            atualizarDataHora();
+        }
+
+        function atualizarDataHora() {
+            const agora = new Date();
+            const dataHora = agora.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('lastUpdate').textContent = dataHora;
+        }
+
+        // ========== FUNÇÕES DE LOGOUT PADRONIZADAS ==========
+        function mostrarModalLogout() {
+            const logoutModal = document.getElementById('logout-modal');
+            logoutModal.style.display = 'flex';
+        }
+
+        // ========== FUNÇÕES DE COMPRAS ==========
+        async function carregarPedidosDoBanco() {
+            try {
+                const token = localStorage.getItem('token');
+                
+                if (!token) {
+                    carregarPedidosDoLocalStorage();
+                    return;
+                }
+
+                const response = await fetch(`${API_URL}/pedidos_compras`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.status === 401) {
+                    localStorage.removeItem('token');
+                    carregarPedidosDoLocalStorage();
+                    return;
+                }
+
+                if (!response.ok) {
+                    carregarPedidosDoLocalStorage();
+                    return;
+                }
+
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    todosPedidos = data.data;
+                    
+                    todosPedidos.forEach(pedido => {
+                        pedido.data_compra = formatarData(pedido.data_compra);
+                        pedido.data_registro = formatarData(pedido.data_registro);
+                        pedido.valor_total = calcularValorTotal(pedido.quantidade, pedido.valor_unitario);
+                    });
+                    
+                    aplicarFiltro();
+                    atualizarInfoTabela();
+                } else {
+                    carregarPedidosDoLocalStorage();
+                }
+            } catch (error) {
+                carregarPedidosDoLocalStorage();
+            }
+        }
+
+        function carregarPedidosDoLocalStorage() {
+            const pedidosSalvos = localStorage.getItem('pedidos_compras');
+            
+            if (pedidosSalvos) {
+                todosPedidos = JSON.parse(pedidosSalvos);
+            } else {
+                const hoje = new Date();
+                const ontem = new Date(hoje);
+                ontem.setDate(hoje.getDate() - 1);
+                const semanaPassada = new Date(hoje);
+                semanaPassada.setDate(hoje.getDate() - 7);
+                const mesPassado = new Date(hoje);
+                mesPassado.setDate(hoje.getDate() - 30);
+                
+                todosPedidos = [
+                    {
+                        id: 1,
+                        codigo: "1001",
+                        descricao: "Milho - Saco 50kg",
+                        quantidade: 10,
+                        valor_unitario: 150.00,
+                        valor_total: 1500.00,
+                        data_compra: mesPassado.toLocaleDateString('pt-BR'),
+                        data_registro: mesPassado.toLocaleDateString('pt-BR'),
+                        status: "Pendente"
+                    },
+                    {
+                        id: 2,
+                        codigo: "1002",
+                        descricao: "Feijão - Tipo 1",
+                        quantidade: 20,
+                        valor_unitario: 85.00,
+                        valor_total: 1700.00,
+                        data_compra: semanaPassada.toLocaleDateString('pt-BR'),
+                        data_registro: semanaPassada.toLocaleDateString('pt-BR'),
+                        status: "Aprovado"
+                    },
+                    {
+                        id: 3,
+                        codigo: "1003",
+                        descricao: "Soja - Grão Selecionado",
+                        quantidade: 15,
+                        valor_unitario: 120.00,
+                        valor_total: 1800.00,
+                        data_compra: ontem.toLocaleDateString('pt-BR'),
+                        data_registro: ontem.toLocaleDateString('pt-BR'),
+                        status: "Recebido"
+                    }
+                ];
+                localStorage.setItem('pedidos_compras', JSON.stringify(todosPedidos));
+            }
+            
+            aplicarFiltro();
+            atualizarInfoTabela();
+        }
+
+        async function deletarPedido(id) {
+            if (!confirm("Tem certeza que deseja excluir este pedido?")) {
+                return;
+            }
+            
+            try {
+                const token = localStorage.getItem('token');
+                
+                if (token) {
+                    await fetch(`${API_URL}/pedidos_compras/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                }
+            } catch (error) {
+                // Continua mesmo se falhar
+            }
+            
+            todosPedidos = todosPedidos.filter(p => p.id !== id);
+            localStorage.setItem('pedidos_compras', JSON.stringify(todosPedidos));
+            aplicarFiltro();
+            atualizarInfoTabela();
+            alert("Pedido excluído com sucesso!");
+        }
+
+        async function editarPedido(id) {
+            const pedido = todosPedidos.find(p => p.id === id);
+            if (!pedido) return;
+            
+            const novaDescricao = prompt("Nova descrição:", pedido.descricao);
+            if (novaDescricao === null) return;
+            
+            const novaQuantidadeStr = prompt("Nova quantidade:", pedido.quantidade);
+            if (novaQuantidadeStr === null) return;
+            
+            const novoValorUnitarioStr = prompt("Novo valor unitário (R$):", formatarMoeda(pedido.valor_unitario));
+            if (novoValorUnitarioStr === null) return;
+            
+            let novaDataCompra = prompt("Nova data da compra (DD/MM/AAAA):", pedido.data_compra);
+            if (novaDataCompra === null) return;
+            
+            // Validações
+            if (!novaDescricao.trim() || !novaQuantidadeStr.trim() || !novoValorUnitarioStr.trim() || !novaDataCompra.trim()) {
+                alert("Todos os campos são obrigatórios!");
+                return;
+            }
+            
+            const dataRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+            if (!dataRegex.test(novaDataCompra)) {
+                alert("Data inválida! Use o formato DD/MM/AAAA");
+                return;
+            }
+            
+            const novaQuantidade = formatarNumero(novaQuantidadeStr);
+            const novoValorUnitario = formatarNumero(novoValorUnitarioStr);
+            
+            if (isNaN(novaQuantidade) || isNaN(novoValorUnitario)) {
+                alert("Quantidade e valor devem ser números válidos!");
+                return;
+            }
+            
+            if (novaQuantidade <= 0 || novoValorUnitario <= 0) {
+                alert("Quantidade e valor unitário devem ser maiores que zero!");
+                return;
+            }
+
+            const novoValorTotal = calcularValorTotal(novaQuantidade, novoValorUnitario);
+            
+            // Atualiza localmente
+            pedido.descricao = novaDescricao;
+            pedido.quantidade = novaQuantidade;
+            pedido.valor_unitario = novoValorUnitario;
+            pedido.valor_total = novoValorTotal;
+            pedido.data_compra = novaDataCompra;
+            pedido.data_registro = new Date().toLocaleDateString('pt-BR');
+            
+            localStorage.setItem('pedidos_compras', JSON.stringify(todosPedidos));
+            
+            // Tenta salvar no banco
+            try {
+                const token = localStorage.getItem('token');
+                
+                if (token) {
+                    const [dia, mes, ano] = novaDataCompra.split('/');
+                    const dataCompraISO = `${ano}-${mes}-${dia}`;
+                    
+                    const pedidoAtualizado = {
+                        descricao: novaDescricao,
+                        quantidade: novaQuantidade,
+                        valor_unitario: novoValorUnitario,
+                        valor_total: novoValorTotal,
+                        data_compra: dataCompraISO,
+                        status: pedido.status || "Pendente"
+                    };
+                    
+                    await fetch(`${API_URL}/pedidos_compras/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(pedidoAtualizado)
+                    });
+                }
+            } catch (error) {
+                // Continua mesmo se falhar
+            }
+            
+            aplicarFiltro();
+            atualizarDataHora();
+            alert("Pedido atualizado com sucesso!");
+        }
+
+        function aplicarFiltro() {
+            const tbody = document.getElementById("lista-pedidos");
+            tbody.innerHTML = "";
+            
+            let pedidosFiltrados = todosPedidos;
+            
+            if (termoFiltro) {
+                pedidosFiltrados = todosPedidos.filter(p => 
+                    p.descricao.toLowerCase().includes(termoFiltro) ||
+                    (p.codigo && p.codigo.toLowerCase().includes(termoFiltro)) ||
+                    (p.data_compra && p.data_compra.toLowerCase().includes(termoFiltro)) ||
+                    p.valor_total.toString().includes(termoFiltro)
+                );
+            }
+            
+            if (pedidosFiltrados.length === 0) {
+                document.getElementById("empty-message").style.display = 'flex';
+                tbody.innerHTML = '';
+            } else {
+                document.getElementById("empty-message").style.display = 'none';
+                
+                pedidosFiltrados.sort((a, b) => {
+                    const dataA = converterDataParaComparacao(a.data_compra);
+                    const dataB = converterDataParaComparacao(b.data_compra);
+                    return dataB - dataA;
+                });
+                
+                pedidosFiltrados.forEach(p => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${p.data_compra || formatarData(p.data_registro) || 'N/A'}</td>
+                        <td>
+                            ${p.codigo ? `<strong>${p.codigo}</strong> - ` : ''}
+                            ${p.descricao}
+                            ${p.status ? `<br><span class="status-badge status-${p.status.toLowerCase()}">${p.status}</span>` : ''}
+                        </td>
+                        <td>${p.quantidade.toLocaleString('pt-BR')}</td>
+                        <td>R$ ${formatarMoeda(p.valor_unitario)}</td>
+                        <td>R$ ${formatarMoeda(p.valor_total)}</td>
+                        <td>
+                            <button class="table-btn edit" onclick="editarPedido(${p.id})" title="Editar pedido">
+                                <i class="fa-solid fa-edit"></i>
+                            </button>
+                            <button class="table-btn delete" onclick="deletarPedido(${p.id})" title="Excluir pedido">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function converterDataParaComparacao(dataString) {
+            if (!dataString) return new Date(0);
+            
+            const parts = dataString.split('/');
+            if (parts.length === 3) {
+                return new Date(parts[2], parts[1] - 1, parts[0]);
+            }
+            
+            return new Date(dataString);
+        }
+
+        function filtrarPedidos() {
+            termoFiltro = document.getElementById('filter-input').value.toLowerCase();
+            aplicarFiltro();
+            atualizarInfoTabela();
+        }
+
+        function limparFiltro() {
+            document.getElementById('filter-input').value = '';
+            termoFiltro = '';
+            aplicarFiltro();
+            atualizarInfoTabela();
+        }
+
+        function atualizarInfoTabela() {
+            const total = todosPedidos.length;
+            const filtrados = termoFiltro ? 
+                todosPedidos.filter(p => 
+                    p.descricao.toLowerCase().includes(termoFiltro) ||
+                    (p.codigo && p.codigo.toLowerCase().includes(termoFiltro)) ||
+                    (p.data_compra && p.data_compra.toLowerCase().includes(termoFiltro))
+                ).length : total;
+            
+            let texto = `${filtrados} pedido${filtrados !== 1 ? 's' : ''}`;
+            if (termoFiltro && filtrados < total) {
+                texto += ` (filtrado de ${total})`;
+            }
+            
+            document.getElementById('total-pedidos').textContent = texto;
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mostra nome do usuário
+            mostrarNomeUsuario();
+            
+            // Carrega pedidos
+            carregarPedidosDoBanco();
+            
+            // Configura o modal de logout (IGUAL AO ESTOQUE)
+            const logoutModal = document.getElementById('logout-modal');
+            const confirmLogout = document.getElementById('confirm-logout');
+            const cancelLogout = document.getElementById('cancel-logout');
+
+            confirmLogout.addEventListener("click", () => {
+                // Limpa todos os dados de sessão (IGUAL AO ESTOQUE)
+                localStorage.removeItem('usuario_logado');
+                localStorage.removeItem('usuario_id');
+                localStorage.removeItem('usuario_nome');
+                localStorage.removeItem('usuario_email');
+                localStorage.removeItem('usuario_username');
+                localStorage.removeItem('token');
+                localStorage.removeItem('nome');
+                localStorage.removeItem('usuario');
+                
+                // Redireciona para a página de login (IGUAL AO ESTOQUE)
+                window.location.href = "login.html";
+            });
+
+            cancelLogout.addEventListener("click", () => {
+                logoutModal.style.display = 'none';
+            });
+
+            // Fecha modal ao clicar fora (IGUAL AO ESTOQUE)
+            window.addEventListener('click', (e) => {
+                if (e.target === logoutModal) {
+                    logoutModal.style.display = 'none';
+                }
+            });
+            
+            // Adiciona estilos para status
+            const style = document.createElement('style');
+            style.textContent = `
+                .status-badge {
+                    display: inline-block;
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    margin-top: 4px;
+                }
+                .status-pendente {
+                    background-color: #fff3cd;
+                    color: #856404;
+                    border: 1px solid #ffeaa7;
+                }
+                .status-aprovado {
+                    background-color: #d1ecf1;
+                    color: #0c5460;
+                    border: 1px solid #bee5eb;
+                }
+                .status-recebido {
+                    background-color: #d4edda;
+                    color: #155724;
+                    border: 1px solid #c3e6cb;
+                }
+                .status-cancelado {
+                    background-color: #f8d7da;
+                    color: #721c24;
+                    border: 1px solid #f5c6cb;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Atualiza a lista a cada 30 segundos
+        setInterval(carregarPedidosDoBanco, 30000);
+    </script>
+</body>
+</html>

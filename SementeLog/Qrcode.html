@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SementeLog QR Code</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div class="container">
+    <aside class="sidebar">
+        <div class="logo-container">
+            <i class="fa-solid fa-seedling logo-icon"></i>
+            <span class="logo-text">SementeLog</span>
+        </div>
+        
+        <nav class="menu">
+            <a href="compras.html" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+            <a href="estoque.html" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+            <a href="logistica.html" class="menu-item"><i class="fa-solid fa-truck"></i> Logística</a>
+            <a href="relatorios.html" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+            <a href="qrcode.html" class="menu-item active"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+            <a href="auditoria.html" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+            <a href="cadastro.html" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+        </nav>
+    </aside>
+
+    <main class="content-area">
+        <!-- BARRA SUPERIOR COM NOME DO USUÁRIO E BOTÃO SAIR -->
+        <div class="top-bar">
+            <div class="user-controls">
+                <span class="user-info-text">
+                    <i class="fa-solid fa-user"></i>
+                    <span id="userDisplayName">Usuário</span>
+                </span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fa-solid fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO ORIGINAL SEM ALTERAÇÕES -->
+        <div class="qrcode-card">
+            <div class="cadastro-header">
+                <h1>QR code Informações</h1>
+            </div>
+
+            <div class="search-lote-bar">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" placeholder="Digite o número do lote" id="input-lote">
+                <button class="buscar-lote" id="buscar-lote">Buscar</button>
+            </div>
+
+            <div id="mensagem-erro" style="display:none; color:red; margin-bottom:15px; font-weight:bold;">
+                Lote não encontrado!
+            </div>
+
+            <div class="qrcode-content">
+                <div class="qrcode-column">
+                    <div class="qr-code-placeholder" id="qrcode"></div>
+                </div>
+
+                <div class="details-column qrcode-details" id="detalhes-lote">
+                    <h3>Detalhes</h3>
+                    <p id="lote-numero">Lote #20231045</p>
+                    <p id="nota-fiscal">Nota Fiscal: 12345</p>
+                    
+                    <br>
+                    
+                    <h3>Dados Principais</h3>
+                    <p id="especie">Espécie: Milho</p>
+                    <p id="quantidade">Quantidade: 1200 Kg</p>
+                    <p id="cliente">Cliente: Fornecedor A</p>
+                    <p>Status: <span id="status-lote" class="status">Concluída</span></p>
+
+                    <br>
+
+                    <h3>Nota fiscal</h3>
+                    <p id="numero-nota">Número: 123456</p>
+                    <a href="#" class="pdf-link" id="ver-pdf">Ver PDF</a>
+
+                    <br>
+
+                    <h3>Percurso Logístico</h3>
+                    <p id="expedido">Expedido: 10/03/2025</p>
+                    <p id="em-rota">Em Rota: 10/03/2025</p>
+                    <p id="data-entrega">Data Entrega: 12/03/2025</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal de Logout -->
+<div id="logout-modal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-door-open"></i> Confirmar Saída</h3>
+        </div>
+        <div class="modal-body">
+            <p>Tem certeza que deseja sair do sistema?</p>
+        </div>
+        <div class="modal-footer">
+            <button id="cancel-logout" class="secondary-btn">Cancelar</button>
+            <button id="confirm-logout" class="login-btn">Sim, Sair</button>
+        </div>
+    </div>
+</div>
+
+<!-- QRCode.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+// ========== FUNÇÕES DO USUÁRIO ==========
+function mostrarNomeUsuario() {
+    // Tenta pegar o nome do usuário
+    const usuarioNome = localStorage.getItem('usuario_nome') || 
+                       localStorage.getItem('nome') || 
+                       localStorage.getItem('usuario') || 
+                       'Usuário';
+    
+    // Mostra o nome no topo
+    document.getElementById('userDisplayName').textContent = usuarioNome;
+}
+
+function logout() {
+    document.getElementById('logout-modal').style.display = 'flex';
+}
+
+// ========== LÓGICA ORIGINAL DO QR CODE ==========
+// Dados simulados de lotes
+const lotes = {
+    "20231045": {
+        nota: "12345",
+        especie: "Milho",
+        quantidade: "1200 Kg",
+        cliente: "Fornecedor A",
+        status: "Concluída",
+        statusColor: "#6aa84f",
+        numeroNota: "123456",
+        expedido: "10/03/2025",
+        emRota: "10/03/2025",
+        entrega: "12/03/2025",
+        pdf: "#"
+    },
+    "20231046": {
+        nota: "12346",
+        especie: "Soja",
+        quantidade: "800 Kg",
+        cliente: "Fornecedor B",
+        status: "Em Transporte",
+        statusColor: "#e69138",
+        numeroNota: "123457",
+        expedido: "11/03/2025",
+        emRota: "11/03/2025",
+        entrega: "13/03/2025",
+        pdf: "#"
+    },
+    "20231047": {
+        nota: "12350",
+        especie: "Feijão",
+        quantidade: "500 Kg",
+        cliente: "Fornecedor C",
+        status: "Aguardando Coleta",
+        statusColor: "#3d85c6",
+        numeroNota: "123460",
+        expedido: "—",
+        emRota: "—",
+        entrega: "—",
+        pdf: "#"
+    }
+};
+
+// Atualizar detalhes do lote
+function atualizarLote(loteNum) {
+    const lote = lotes[loteNum];
+    const erro = document.getElementById("mensagem-erro");
+
+    if (!lote) {
+        erro.style.display = "block";
+        document.getElementById("qrcode").innerHTML = "";
+        return;
+    }
+
+    erro.style.display = "none";
+
+    document.getElementById("lote-numero").textContent = "Lote #" + loteNum;
+    document.getElementById("nota-fiscal").textContent = "Nota Fiscal: " + lote.nota;
+    document.getElementById("especie").textContent = "Espécie: " + lote.especie;
+    document.getElementById("quantidade").textContent = "Quantidade: " + lote.quantidade;
+    document.getElementById("cliente").textContent = "Cliente: " + lote.cliente;
+
+    const statusSpan = document.getElementById("status-lote");
+    statusSpan.textContent = lote.status;
+    statusSpan.style.backgroundColor = lote.statusColor;
+
+    document.getElementById("numero-nota").textContent = "Número: " + lote.numeroNota;
+    document.getElementById("ver-pdf").href = lote.pdf;
+
+    document.getElementById("expedido").textContent = "Expedido: " + lote.expedido;
+    document.getElementById("em-rota").textContent = "Em Rota: " + lote.emRota;
+    document.getElementById("data-entrega").textContent = "Data Entrega: " + lote.entrega;
+
+    document.getElementById("qrcode").innerHTML = "";
+    new QRCode(document.getElementById("qrcode"), {
+        text: `Lote: ${loteNum}\nNota: ${lote.nota}\nCliente: ${lote.cliente}\nEspecie :${lote.especie}\nQuantidade: ${lote.quantidade}`,
+        width: 160,
+        height: 160
+    });
+}
+
+// ========== INICIALIZAÇÃO ==========
+document.addEventListener('DOMContentLoaded', function() {
+    // Mostra nome do usuário
+    mostrarNomeUsuario();
+    
+    // Configura eventos originais
+    document.getElementById("buscar-lote").addEventListener("click", () => {
+        const loteNum = document.getElementById("input-lote").value.trim();
+        atualizarLote(loteNum);
+    });
+
+    document.getElementById("input-lote").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            document.getElementById("buscar-lote").click();
+        }
+    });
+
+    // Inicializa com um lote
+    atualizarLote("20231045");
+    
+    // Modal de logout
+    const logoutModal = document.getElementById('logout-modal');
+    const confirmLogout = document.getElementById('confirm-logout');
+    const cancelLogout = document.getElementById('cancel-logout');
+
+    confirmLogout.addEventListener("click", () => {
+        // Limpa todos os dados
+        localStorage.removeItem('usuario_logado');
+        localStorage.removeItem('usuario_id');
+        localStorage.removeItem('usuario_nome');
+        localStorage.removeItem('usuario_email');
+        localStorage.removeItem('usuario_username');
+        localStorage.removeItem('token');
+        localStorage.removeItem('nome');
+        localStorage.removeItem('usuario');
+        
+        // Redireciona para login
+        window.location.href = "login.html";
+    });
+
+    cancelLogout.addEventListener("click", () => {
+        logoutModal.style.display = 'none';
+    });
+
+    // Fecha modal ao clicar fora
+    window.addEventListener('click', (e) => {
+        if (e.target === logoutModal) {
+            logoutModal.style.display = 'none';
+        }
+    });
+});
+</script>
+</body>
+</html>

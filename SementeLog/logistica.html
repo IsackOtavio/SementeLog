@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SementeLog Logística</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <i class="fa-solid fa-seedling logo-icon"></i>
+                <span class="logo-text">SementeLog</span>
+            </div>
+            
+            <nav class="menu">
+                <a href="compras.html" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> Compras</a>
+                <a href="estoque.html" class="menu-item"><i class="fa-solid fa-box-open"></i> Estoque</a>
+                <a href="logistica.html" class="menu-item active"><i class="fa-solid fa-truck"></i> Logística</a>
+                <a href="relatorios.html" class="menu-item"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+                <a href="Qrcode.html" class="menu-item"><i class="fa-solid fa-qrcode"></i> QRcode Informações</a>
+                <a href="auditoria.html" class="menu-item"><i class="fa-solid fa-money-check-dollar"></i> Auditoria</a>
+                <a href="cadastro.html" class="menu-item"><i class="fa-solid fa-user-plus"></i> Cadastro</a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <!-- BARRA SUPERIOR COM NOME DO USUÁRIO E BOTÃO SAIR -->
+            <div class="top-bar">
+                <div class="spacer"></div>
+                <div class="user-controls">
+                    <span class="user-info-text">
+                        <i class="fa-solid fa-user"></i>
+                        <span id="userDisplayName">Usuário</span>
+                    </span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fa-solid fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <!-- O RESTO DO SEU CONTEÚDO ORIGINAL DA PÁGINA DE LOGÍSTICA AQUI -->
+            <!-- Não modifique o conteúdo abaixo -->
+            <div class="logistica-card">
+                <div class="cadastro-header">
+                    <h1>Logística</h1>
+                </div>
+
+                <div class="filters-and-content">
+                    <div class="logistica-filters">
+                        <label for="especie">Espécie: </label>
+                        <select id="especie" class="dropdown">
+                            <option value="Todos">Todos</option>
+                            <option value="Milho">Milho</option>
+                            <option value="Soja">Soja</option>
+                            <option value="Feijão">Feijão</option>
+                        </select>
+                        
+                        <label for="status">Status: </label>
+                        <select id="status" class="dropdown">
+                            <option value="Todos">Todos</option>
+                            <option value="Em Transporte">Em Transporte</option>
+                            <option value="Entregue">Entregue</option>
+                            <option value="Pendente">Pendente</option>
+                        </select>
+                    </div>
+
+                    <div class="logistica-content">
+                        <iframe 
+                            id="mapa-iframe"
+                            width="80%" 
+                            height="500" 
+                            style="border:0; border-radius:10px;"
+                            allowfullscreen 
+                            loading="lazy">
+                        </iframe>
+
+                        <div class="details-column">
+                            <h3>Detalhes</h3>
+                            <p id="lote">Lote #20231045</p>
+                            <p id="nota">Nota Fiscal: 12345</p>
+                            <br>
+                            
+                            <h3>Status</h3>
+                            <p id="status-text" class="status-tracking">Em transporte</p>
+                            
+                            <div class="timeline" id="timeline"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Logout -->
+    <div id="logout-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-door-open"></i> Confirmar Saída</h3>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja sair do sistema?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-logout" class="secondary-btn">Cancelar</button>
+                <button id="confirm-logout" class="login-btn">Sim, Sair</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ========== FUNÇÕES DO USUÁRIO ==========
+    function mostrarNomeUsuario() {
+        // Tenta pegar o nome do usuário
+        const usuarioNome = localStorage.getItem('usuario_nome') || 
+                           localStorage.getItem('nome') || 
+                           localStorage.getItem('usuario') || 
+                           'Usuário';
+        
+        // Mostra o nome no topo
+        document.getElementById('userDisplayName').textContent = usuarioNome;
+    }
+
+    function logout() {
+        document.getElementById('logout-modal').style.display = 'flex';
+    }
+
+    // ========== LOGÍSTICA - MESMO JS ORIGINAL ==========
+    const logisticaData = [
+        {
+            lote: "20231045",
+            nota: "12345",
+            especie: "Milho",
+            status: "Em Transporte",
+            timeline: [
+                { step: "Expedido", date: "10/03/2025", completed: true },
+                { step: "Em Rota", date: "11/03/2025", active: true },
+                { step: "Entregue", date: "", completed: false }
+            ],
+            mapa: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.935670925987!2d-34.884804!3d-8.047560!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab18ea06a2e5c1%3A0x4e33ad4fef472e25!2sRecife%20Antigo!5e0!3m2!1spt-BR!2sBR!4v1701450000000"
+        },
+        {
+            lote: "20231046",
+            nota: "12346",
+            especie: "Soja",
+            status: "Entregue",
+            timeline: [
+                { step: "Expedido", date: "08/03/2025", completed: true },
+                { step: "Em Rota", date: "09/03/2025", completed: true },
+                { step: "Entregue", date: "10/03/2025", active: true }
+            ],
+            mapa: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.812515068903!2d-46.656571!3d-23.580067!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59d811fc1fb7%3A0x57b30a8060b0cc8c!2sAvenida%20Paulista!5e0!3m2!1spt-BR!2sBR!4v1701450001111"
+        },
+        {
+            lote: "20231047",
+            nota: "12347",
+            especie: "Feijão",
+            status: "Pendente",
+            timeline: [
+                { step: "Expedido", date: "", completed: false },
+                { step: "Em Rota", date: "", completed: false },
+                { step: "Entregue", date: "", completed: false }
+            ],
+            mapa: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.57324599395!2d-38.501648!3d-12.971441!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x716037b7dccf9d5%3A0x7eea90bf34e66b4!2sElevador%20Lacerda!5e0!3m2!1spt-BR!2sBR!4v1701450002222"
+        }
+    ];
+
+    function atualizarTela() {
+        const especie = document.getElementById("especie").value;
+        const status = document.getElementById("status").value;
+
+        const resultado = logisticaData.find(item =>
+            (especie === "Todos" || item.especie === especie) &&
+            (status === "Todos" || item.status === status)
+        );
+
+        if (!resultado) {
+            renderSemRegistros();
+            return;
+        }
+
+        renderInfo(resultado);
+        renderMapa(resultado.mapa);
+        renderTimeline(resultado.timeline);
+    }
+
+    function renderInfo(item) {
+        document.getElementById("lote").textContent = "Lote: #" + item.lote;
+        document.getElementById("nota").textContent = "Nota Fiscal: " + item.nota;
+
+        const statusEl = document.getElementById("status-text");
+        statusEl.textContent = item.status;
+        statusEl.style.color =
+            item.status.includes("Entregue") ? "green" :
+            item.status.includes("Rota") ? "orange" :
+            item.status.includes("Pendente") ? "red" :
+            "#333";
+    }
+
+    function renderMapa(url) {
+        const iframe = document.getElementById("mapa-iframe");
+        iframe.src = url || "";
+    }
+
+    function renderTimeline(lista) {
+        const box = document.getElementById("timeline");
+        box.innerHTML = "";
+        lista.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "timeline-item" +
+                (item.completed ? " completed" : "") +
+                (item.active ? " active" : "");
+            div.innerHTML = `
+                <div class="dot"></div>
+                <div class="line"></div>
+                <div class="info">
+                    <p><strong>${item.step}</strong></p>
+                    ${item.date ? `<p class="date">${item.date}</p>` : ""}
+                </div>
+            `;
+            box.appendChild(div);
+        });
+    }
+
+    function renderSemRegistros() {
+        document.getElementById("lote").textContent = "Nenhum registro encontrado";
+        document.getElementById("nota").textContent = "";
+        document.getElementById("status-text").textContent = "";
+        document.getElementById("timeline").innerHTML = "";
+        document.getElementById("mapa-iframe").src = "";
+    }
+
+    // ========== INICIALIZAÇÃO ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mostra nome do usuário
+        mostrarNomeUsuario();
+        
+        // Configura eventos da logística (código original)
+        document.getElementById("especie").addEventListener("change", atualizarTela);
+        document.getElementById("status").addEventListener("change", atualizarTela);
+        atualizarTela();
+        
+        // Modal de logout
+        const logoutModal = document.getElementById('logout-modal');
+        const confirmLogout = document.getElementById('confirm-logout');
+        const cancelLogout = document.getElementById('cancel-logout');
+
+        confirmLogout.addEventListener("click", () => {
+            // Limpa todos os dados
+            localStorage.removeItem('usuario_logado');
+            localStorage.removeItem('usuario_id');
+            localStorage.removeItem('usuario_nome');
+            localStorage.removeItem('usuario_email');
+            localStorage.removeItem('usuario_username');
+            localStorage.removeItem('token');
+            localStorage.removeItem('nome');
+            localStorage.removeItem('usuario');
+            
+            // Redireciona para login
+            window.location.href = "login.html";
+        });
+
+        cancelLogout.addEventListener("click", () => {
+            logoutModal.style.display = 'none';
+        });
+
+        // Fecha modal ao clicar fora
+        window.addEventListener('click', (e) => {
+            if (e.target === logoutModal) {
+                logoutModal.style.display = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>
