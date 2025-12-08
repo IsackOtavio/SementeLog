@@ -1,4 +1,7 @@
+****Back end****
+
 # 📦 API de Gerenciamento de Estoque – Explicação Didática e Completa
+
 
 Este documento explica, passo a passo, como funciona toda a API de estoque desenvolvida em Flask com MySQL.  
 Aqui você encontra **tudo em um único arquivo**, sem separações complicadas e sem códigos.  
@@ -216,4 +219,5 @@ Aqui você tem, **em um único documento**, toda explicação detalhada e didát
 - Como tudo se conecta  
 
 Esse README serve como manual completo do backend.
+
 
