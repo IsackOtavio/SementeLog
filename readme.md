@@ -1,4 +1,216 @@
+Front End.
+
+# 📜 Explicação das Páginas HTML
+
+Abaixo estão explicadas todas as páginas do seu front.
+
+---
+
+## 🔐 login.html
+
+Página de login do sistema.
+
+- Contém formulário de email/usuário e senha  
+- Botão para acessar  
+- Validação simples  
+- Após login, redireciona para a página principal  
+
+---
+
+## 🏠 BEM-VINDO.HTML
+
+Tela inicial do sistema após o login.
+
+- Exibe mensagem de boas-vindas  
+- Mostra atalhos para as principais funções do sistema  
+- Serve como “home” do usuário  
+
+---
+
+## 📝 cadastro.html
+
+Página para cadastro geral.
+
+Pode cadastrar:
+
+- Usuários  
+- Produtos  
+- Ou outros registros (dependendo da lógica do sistema)
+
+Aqui o JavaScript coleta os dados e envia via POST para o backend.
+
+---
+
+## 🧾 compras.html
+
+Área voltada para controle de compras.
+
+- Listagem ou criação de pedidos de compra  
+- Campos de valores, fornecedor, itens  
+- Integração futura com estoque  
+
+---
+
+## 📥 entrada_mercadoria.html
+
+Página dedicada às **entradas** de produtos no estoque.
+
+Aqui o usuário:
+
+- Seleciona o produto  
+- Informa quantidade que está chegando  
+- Envia ao backend  
+- O estoque é atualizado  
+
+---
+
+## 📦 estoque.html
+
+A página principal do sistema.
+
+Aqui acontece:
+
+- Listagem completa de produtos  
+- Busca de produto por ID  
+- Botão de editar (abrindo modal com dados)  
+- Botão de excluir  
+- Integração total com script.js  
+
+O JavaScript faz um **GET /api/estoque** e preenche a tabela.
+
+---
+
+## 📤 saida_mercadoria.html
+
+Página para **registrar saídas** do estoque.
+
+- Seleção do produto  
+- Quantidade retirada  
+- Motivo da saída  
+- Atualização do estoque no backend  
+
+---
+
+## 🧠 auditoria.html
+
+Página usada para fins de auditoria.
+
+- Mostra todos os registros de movimentações  
+- Pode listar entradas e saídas  
+- Serve para controle interno  
+
+---
+
+## 📊 relatorios.html
+
+Área de relatórios.
+
+- Visualização de resumo do estoque  
+- Relatórios de entradas/saídas  
+- Possível exportação futura  
+
+---
+
+## 🧭 governança.html
+
+Página institucional para informações de governança.
+
+---
+
+## 📑 licitacao.html
+
+Página voltada a processos de licitação e documentos.
+
+---
+
+## 🚚 logistica.html
+
+Área dedicada à logística e movimentações do sistema.
+
+---
+
+## 🛒 pedido_compra.html
+
+Criação e controle de pedidos de compra.
+
+---
+
+## 📱 Qrcode.html
+
+Página usada para:
+
+- Ler QR Code  
+- Exibir informações do produto automaticamente  
+
+---
+
+# ⚙️ script.js — Explicação Didática
+
+Este é o arquivo mais importante do front-end.
+
+Ele é responsável por:
+
+### ✔️ Carregar a lista de produtos  
+Faz um GET para `/api/estoque` e preenche a tabela.
+
+### ✔️ Abrir modal de edição  
+Quando o usuário clica em "Editar", o JS:
+
+- Busca os dados do produto pelo ID  
+- Preenche o formulário  
+- Mostra o modal
+
+### ✔️ Salvar produto novo  
+Envia os dados do formulário via POST.
+
+### ✔️ Atualizar produto  
+Envia um PUT para `/api/estoque/<id>`.
+
+### ✔️ Excluir produto  
+Envia DELETE para remover o item.
+
+### ✔️ Fechar e abrir modais  
+Controla toda a parte visual de pop-ups.
+
+Sem esse arquivo, o sistema não funciona.
+
+---
+
+# 🎨 style.css — Explicação Didática
+
+Este arquivo controla:
+
+- Cores  
+- Fontes  
+- Botões  
+- Tabelas  
+- Inputs  
+- Layout geral das páginas  
+- Responsividade  
+- Estilo dos modais  
+
+Praticamente tudo o que você vê visualmente é definido aqui.
+
+---
+
+# 🔄 Fluxo Completo do Usuário
+
+1. Usuário acessa *login.html*  
+2. Após logar, vai para *BEM-VINDO.HTML*  
+3. Navega para *estoque.html* (parte principal)  
+4. A tabela é carregada via JavaScript  
+5. Ele pode:
+   - cadastrar  
+   - editar  
+   - excluir  
+   - registrar entrada  
+   - registrar saída  
+6. A ação é enviada ao backend  
+7. Backend responde  
+8. Front atualiza a tela automaticamente  
+
 ****Back end****
+
 
 # 📦 API de Gerenciamento de Estoque – Explicação Didática e Completa
 
@@ -219,5 +431,6 @@ Aqui você tem, **em um único documento**, toda explicação detalhada e didát
 - Como tudo se conecta  
 
 Esse README serve como manual completo do backend.
+
 
 
